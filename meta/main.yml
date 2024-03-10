@@ -5,7 +5,7 @@ galaxy_info:
   company: micimo GmbH
   license: GPLv3
   min_ansible_version: "2.4"
-  namespace: micimo
+  namespace: martin-micimo
   role_name: haproxy
   galaxy_tags:
     - haproxy
