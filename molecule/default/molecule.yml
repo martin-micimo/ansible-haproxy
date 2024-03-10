@@ -1,0 +1,79 @@
+---
+dependency:
+  name: galaxy
+  enabled: false
+driver:
+  name: docker
+platforms:
+  # https://wiki.debian.org/DebianReleases
+  - name: debian12
+    image: debian:12-slim
+    command: sleep infinity
+    groups: [Debian]
+    privileged: false
+#  - name: debian11
+#    image: debian:11-slim
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
+#  - name: debian10
+#    image: debian:10-slim
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
+#  # https://wiki.ubuntu.com/Releases
+#  - name: ubuntu22.04
+#    image: ubuntu:22.04
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
+#  - name: ubuntu20.04
+#    image: ubuntu:20.04
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
+#  - name: ubuntu18.04
+#    image: ubuntu:18.04
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
+#  - name: rockylinux9
+#    image: rockylinux:9
+#    command: sleep infinity
+#    groups: [RedHat]
+#    privileged: false
+#  - name: almalinux93
+#    image: almalinux:9.3
+#    command: sleep infinity
+#    groups: [RedHat]
+#    privileged: false
+#  - name: almalinux92
+#    image: almalinux:9.2
+#    command: sleep infinity
+#    groups: [RedHat]
+#    privileged: false
+#  - name: almalinux91
+#    image: almalinux:9.1
+#    command: sleep infinity
+#    groups: [RedHat]
+#    privileged: false
+#  - name: almalinux90
+#    image: almalinux:9.0
+#    command: sleep infinity
+#    groups: [RedHat]
+#    privileged: false
+provisioner:
+  name: ansible
+scenario:
+  name: default
+  test_sequence:
+    # - lint
+    - destroy
+    - create
+    - converge
+    # - idempotence
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: true

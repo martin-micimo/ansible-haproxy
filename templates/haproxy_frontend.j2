@@ -1,0 +1,11 @@
+{% if haproxy_frontend_vars | length > 0 %}
+{% for frontend in haproxy_frontend_vars %}
+frontend {{ frontend.name }}
+{% for frontend_var in frontend.vars %}
+  {{ frontend_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

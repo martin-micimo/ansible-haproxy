@@ -1,0 +1,6 @@
+{% if haproxy_modules_vars | length > 0 %}
+{% for module_var in haproxy_modules_vars %}
+{{ module_var }}
+{% endfor %}
+{% endif %}
+

@@ -1,0 +1,11 @@
+{% if haproxy_backend_vars | length > 0 %}
+{% for backend in haproxy_backend_vars %}
+backend {{ backend.name }}
+{% for backend_var in backend.vars %}
+  {{ backend_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

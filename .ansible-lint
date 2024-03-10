@@ -1,0 +1,10 @@
+---
+parseable: true
+skip_list:
+  - no-changed-when
+  - role-name[path]
+  - yaml[line-length]
+use_default_rules: true
+verbosity: 1
+exclude_paths:
+  - molecule/

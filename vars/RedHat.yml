@@ -1,0 +1,11 @@
+---
+haproxy_config_dir: "/etc/haproxy/conf.d"
+haproxy_selinux_packages:
+  - python3-policycoreutils
+  - python3-setools
+  - setools
+  - libsemanage
+  - libsepol-utils
+haproxy_helper_scripts_packages:
+  - rsyslog
+  - procps-ng

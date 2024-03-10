@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    haproxy_molecule_test: true
+    haproxy_show_debug: true
+  tasks:
+    - ansible.builtin.import_role:
+        name: haproxy
+...

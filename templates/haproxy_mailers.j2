@@ -1,0 +1,11 @@
+{% if haproxy_mailers_vars | length > 0 %}
+{% for mailers in haproxy_mailers_vars %}
+mailers {{ mailers.name }}
+{% for mailers_var in mailers.vars %}
+  {{ mailers_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

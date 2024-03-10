@@ -1,0 +1,37 @@
+---
+- name: Simple Haproxy Setup.
+  hosts: local
+  gather_facts: true
+  become: true
+  roles:
+    - role: "../haproxy"
+  vars:
+    haproxy_mode: "system"
+    haproxy_frontend_vars:
+      - name: "prometheus"
+        vars:
+          - "mode http"
+          - "bind localhost:{{ haproxy_prometheus_port }}"
+          - "http-request use-service prometheus-exporter if { path /metrics }"
+          - "stats enable"
+          - "stats uri /stats"
+          - "stats refresh 10s"
+      - name: "http"
+        vars:
+          - "mode http"
+          - "bind *:80"
+          - "default_backend web_servers"
+    haproxy_backend_vars:
+      - name: "web_servers"
+        vars:
+          - "mode http"
+          - "balance leastconn"
+          - "server myfirstserver 192.168.1.25:80 check"
+          - "server mysecondserver 192.168.1.26:80 check"
+          - "server mythirdserver 192.168.1.27:80 check"
+    haproxy_listen_vars:
+      - name: "ssh_proxy"
+        vars:
+          - "mode tcp"
+          - "bind *:8080"
+          - "server server1 192.168.1.25:22 check"

@@ -1,0 +1,42 @@
+---
+haproxy_docker_dir: "/opt/haproxy"
+haproxy_docker_name: "haproxy"
+haproxy_docker_restart_policy: "always"
+haproxy_docker_base_image: "debian:bookworm-slim"
+haproxy_docker_patch_version: "2.8.6"
+haproxy_docker_src_download_url: ""
+haproxy_docker_minor_version: "{{ haproxy_docker_patch_version.split('.')[0] }}.{{ haproxy_docker_patch_version.split('.')[1] }}"
+haproxy_docker_image: "{{ haproxy_docker_name }}:{{ haproxy_docker_patch_version }}"
+haproxy_docker_config_dir: "/etc/haproxy"
+haproxy_docker_mounts:
+  - source: "{{ haproxy_docker_dir }}/config"
+    target: "{{ haproxy_docker_config_dir }}"
+    type: "bind"
+haproxy_docker_user: "haproxy"
+haproxy_docker_uid_gid: "99"
+haproxy_docker_workdir: "/var/lib/haproxy"
+haproxy_docker_makeopts: >-
+  TARGET=linux-glibc
+  USE_GETADDRINFO=1
+  USE_LUA=1
+  LUA_INC=/usr/include/lua5.3
+  USE_OPENSSL=1
+  USE_PCRE2=1
+  USE_PCRE2_JIT=1
+  USE_PROMEX=1
+  EXTRA_OBJS=""
+haproxy_docker_commands: '"-W", "-db", "-f", "{{ haproxy_docker_config_dir }}/{{ haproxy_config_file }}"'
+haproxy_docker_sysctls:
+  - "net.ipv4.ip_unprivileged_port_start=0"
+haproxy_docker_log_options:
+  - driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "1"
+haproxy_docker_container_name: "haproxy"
+haproxy_docker_extra_ports: []
+haproxy_docker_cpus: "1"
+haproxy_docker_mem_reservation: "0.5g"
+haproxy_docker_mem_limit: "1g"
+haproxy_docker_service_extra_settings: []
+...

@@ -1,0 +1,118 @@
+---
+haproxy_global_vars:
+  - "log stdout local0 info"
+  - "daemon"
+  - "user haproxy"
+  - "group haproxy"
+haproxy_defaults_vars:
+  - "option tcplog"
+  - "log global"
+  - "mode tcp"
+  - "option dontlognull"
+  - "timeout connect 5000"
+  - "timeout client 500000"
+  - "timeout server 500000"
+  - "errorfiles default_error_files"
+haproxy_userlist_vars:
+  - name: "insecure"
+    vars:
+      - "group G1 users scott,xdb"
+      - "user scott insecure-password elgato"
+      - "user xdb insecure-password hello"
+haproxy_peers_vars:
+  - name: "mypeers"
+    vars:
+      - "peer {{ ansible_hostname }} {{ ansible_default_ipv4.address }}:1024"
+haproxy_mailers_vars:
+  - name: "mymailers"
+    vars:
+      - "mailer smtp1 {{ ansible_default_ipv4.address }}:587"
+haproxy_programs_vars: []
+haproxy_httperrors_vars:
+  - name: "default_error_files"
+    vars:
+      - "errorfile 400 /etc/haproxy/errors/400.http"
+      - "errorfile 403 /etc/haproxy/errors/403.http"
+      - "errorfile 408 /etc/haproxy/errors/408.http"
+      - "errorfile 500 /etc/haproxy/errors/500.http"
+      - "errorfile 502 /etc/haproxy/errors/502.http"
+      - "errorfile 503 /etc/haproxy/errors/503.http"
+      - "errorfile 504 /etc/haproxy/errors/504.http"
+haproxy_rings_vars:
+  - name: "myring"
+    vars:
+      - 'description "My local buffer"'
+      - "format rfc3164"
+      - "maxlen 1200"
+      - "size 32764"
+      - "timeout connect 5s"
+      - "timeout server 10s"
+      - "server mysyslogsrv {{ ansible_default_ipv4.address }}:6514 log-proto octet-count"
+haproxy_logforward_vars:
+  - name: "sylog-loadb"
+    vars:
+      - "dgram-bind 127.0.0.1:1514"
+      - "bind 127.0.0.1:1514"
+      - "log global"
+      - "log ring@myring local0"
+      - "log 127.0.0.1:10001 sample 1:4 local0"
+haproxy_modules_vars: []
+haproxy_resolvers_vars:
+  - name: "mydns"
+    vars:
+      - "nameserver dns1 8.8.8.8:53"
+haproxy_listen_vars:
+  - name: "http_proxy"
+    vars:
+      - "bind 127.0.0.1:80"
+haproxy_frontend_vars:
+  - name: "prometheus"
+    vars:
+      - "mode http"
+      - "bind *:8404"
+      - "http-request use-service prometheus-exporter if { path /metrics }"
+      - "stats enable"
+      - "stats uri /stats"
+      - "stats refresh 10s"
+haproxy_backend_vars:
+  - name: "website1"
+    vars:
+      - "mode http"
+      - "server website1 127.0.0.1:81"
+  - name: "website2"
+    vars:
+      - "mode http"
+      - "server website2 127.0.0.1:82"
+haproxy_error_files:
+  - state: 400
+    description: "Bad Request"
+    explanation: "You sent a malformed Request."
+    method: "close"
+  - state: 403
+    description: "Forbidden"
+    explanation: "You do not have Access to this Site."
+    method: "close"
+  - state: 408
+    description: "Request Timeout"
+    explanation: "Your Request timed out."
+    method: "close"
+  - state: 500
+    description: "Internal Server Error"
+    explanation: "There is an internal Server Error on our side."
+    method: "close"
+  - state: 502
+    description: "Bad Gateway"
+    explanation: "The Server could not redirect you."
+    method: "close"
+  - state: 503
+    description: "Service Unavailable"
+    explanation: "This Service is currently unavailable."
+    method: "close"
+  - state: 504
+    description: "Gateway Timeout"
+    explanation: "The Server could not redirect you in time."
+    method: "close"
+haproxy_lua_files: []
+haproxy_config_maps: []
+haproxy_validation_command: "haproxy -f %s -c -q"
+...

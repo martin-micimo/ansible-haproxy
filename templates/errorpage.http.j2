@@ -1,0 +1,16 @@
+HTTP/1.1 {{ item.state }} {{ item.description }}
+Cache-Control: no-cache
+Connection: {{ item.method }}
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ item.state }} {{ item.description }}</title>
+  </head>
+  <body>
+     <h1>{{ item.state }} {{ item.description }}</h1>
+     <h3>{{ item.explanation }}</h3>
+  </body>
+</html>

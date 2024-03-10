@@ -1,0 +1,11 @@
+{% if haproxy_resolvers_vars | length > 0 %}
+{% for resolvers in haproxy_resolvers_vars %}
+resolvers {{ resolvers.name }}
+{% for resolvers_var in resolvers.vars %}
+  {{ resolvers_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

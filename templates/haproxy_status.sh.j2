@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+# Gather data
+METRICS=$(curl --silent {{ haproxy_helper_scripts_metrics_auth }} localhost:{{ haproxy_prometheus_port }}/metrics || true)
+
+# Output Informations
+HAPROXY_UPTIME_SEC=$(echo "${METRICS}" | grep '^haproxy_process_uptime_seconds' | cut --delimiter ' ' --fields 2)
+echo "HAProxy Uptime: ${HAPROXY_UPTIME_SEC} seconds"
+echo "Frontends:"
+# Only show Results that start with the key and end with 1
+echo "${METRICS}" | grep '^haproxy_frontend_status' | grep '1$'
+echo "Backends:"
+echo "${METRICS}" | grep '^haproxy_server_status' | grep '1$'

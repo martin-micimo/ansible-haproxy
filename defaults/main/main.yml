@@ -1,0 +1,22 @@
+---
+# General Seering Variables
+haproxy_mode: "system"
+haproxy_service_state: "started"
+haproxy_config_file: "haproxy.cfg"
+# System Steering Variables
+haproxy_config_logrotate: false
+haproxy_selinux_enabled: false
+haproxy_firewalld_enabled: false
+haproxy_sysctl_enabled: false
+haproxy_helper_scripts_enabled: false
+haproxy_dhparams_create: false
+haproxy_dhparams_speedup: false
+# Docker Steering Variables
+haproxy_docker_build: false
+haproxy_docker_push: false
+haproxy_docker_compose: false
+# Test Steering Variables
+haproxy_show_debug: false
+haproxy_molecule_test: false
+haproxy_testing_mode: false
+...

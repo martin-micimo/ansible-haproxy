@@ -1,0 +1,11 @@
+{% if haproxy_programs_vars | length > 0 %}
+{% for programs in haproxy_programs_vars %}
+program {{ programs.name }}
+{% for programs_var in programs.vars %}
+  {{ programs_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

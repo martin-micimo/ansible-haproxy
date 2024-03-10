@@ -1,0 +1,72 @@
+# This is a stripped down version of https://raw.githubusercontent.com/docker-library/haproxy/master/2.8/Dockerfile
+# Big Difference is the missing of a docker-entrypoint.sh File
+# The Config is supposed to be mounted into the Container with a bind mount
+
+FROM {{ haproxy_docker_base_image }}
+
+ENV HAPROXY_VERSION {{ haproxy_docker_patch_version }}
+{% if haproxy_docker_src_download_url | length > 0 %}
+ENV HAPROXY_URL {{ haproxy_docker_src_download_url }}
+{% else %}
+ENV HAPROXY_URL https://www.haproxy.org/download/{{ haproxy_docker_minor_version }}/src/haproxy-{{ haproxy_docker_patch_version }}.tar.gz
+{% endif %}
+
+RUN set -eux; \
+ apt-get update; \
+ \
+ # Install permanent Packages that stay in the Image
+ apt-get install -y --no-install-recommends ca-certificates; \
+ \
+ # Add haproxy User
+ groupadd --gid {{ haproxy_docker_uid_gid }} --system {{ haproxy_docker_user }}; \
+ useradd --gid {{ haproxy_docker_user }} --home-dir {{ haproxy_docker_workdir }} --no-create-home --system --uid {{ haproxy_docker_uid_gid }} {{ haproxy_docker_user }}; \
+ mkdir {{ haproxy_docker_workdir }}; \
+ chown {{ haproxy_docker_user }}:{{ haproxy_docker_user }} {{ haproxy_docker_workdir }}; \
+ \
+ # Remember installed Packages
+ savedAptMark="$(apt-mark showmanual)"; \
+ \
+ # Install Build dependencies
+ apt-get install -y --no-install-recommends gcc libc6-dev liblua5.3-dev libpcre2-dev libssl-dev make wget; \
+ rm -rf /var/lib/apt/lists/*; \
+ \
+ # Download and extract HAProxy Sources
+ wget -O haproxy.tar.gz "$HAPROXY_URL"; \
+ mkdir -p /usr/src/haproxy; \
+ tar -xzf haproxy.tar.gz -C /usr/src/haproxy --strip-components=1; \
+ rm haproxy.tar.gz; \
+ \
+ # Build the HAProxy Binary
+ makeOpts='{{ haproxy_docker_makeopts }}'; \
+ dpkgArch="$(dpkg --print-architecture)"; \
+ case "$dpkgArch" in \
+   armel) makeOpts="$makeOpts ADDLIB=-latomic" ;; \
+ esac; \
+ nproc="$(nproc)"; \
+ eval "make -C /usr/src/haproxy -j '$nproc' all $makeOpts"; \
+ eval "make -C /usr/src/haproxy install-bin $makeOpts"; \
+ \
+ # Clean up temporary Files and Packages
+ rm -rf /usr/src/haproxy; \
+ apt-mark auto '.*' > /dev/null; \
+ [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
+ find /usr/local -type f -executable -exec ldd '{}' ';' \
+ | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
+ | sort -u \
+ | xargs -r dpkg-query --search \
+ | cut -d: -f1 \
+ | sort -u \
+ | xargs -r apt-mark manual; \
+ apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+ \
+ # Smoketest the executable
+ haproxy -v
+
+# For Graceful Stopping the HAProxy
+STOPSIGNAL SIGUSR1
+
+ENTRYPOINT ["haproxy"]
+CMD [{{ haproxy_docker_commands }}]
+
+USER {{ haproxy_docker_user }}
+WORKDIR {{ haproxy_docker_workdir }}

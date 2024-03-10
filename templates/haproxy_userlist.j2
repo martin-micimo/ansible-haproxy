@@ -1,0 +1,11 @@
+{% if haproxy_userlist_vars | length > 0 %}
+{% for userlist in haproxy_userlist_vars %}
+userlist {{ userlist.name }}
+{% for userlist_var in userlist.vars %}
+  {{ userlist_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

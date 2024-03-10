@@ -1,0 +1,79 @@
+---
+haproxy_global_vars:
+#  - "log stdout format raw daemon info"
+  - "log /dev/log local0"
+  - "log /dev/log local1 notice"
+  - "chroot /var/lib/haproxy"
+  - "user haproxy"
+  - "group haproxy"
+  - "daemon"
+haproxy_defaults_vars:
+  - "option tcplog"
+  - "log global"
+  - "option dontlognull"
+  - "timeout connect 5000"
+  - "timeout client 500000"
+  - "timeout server 500000"
+  - "errorfiles default_error_files"
+haproxy_userlist_vars: []
+haproxy_peers_vars: []
+haproxy_mailers_vars: []
+haproxy_programs_vars: []
+haproxy_httperrors_vars:
+  - name: "default_error_files"
+    vars:
+      - "errorfile 400 {{ haproxy_errors_dir }}/400.http"
+      - "errorfile 403 {{ haproxy_errors_dir }}/403.http"
+      - "errorfile 408 {{ haproxy_errors_dir }}/408.http"
+      - "errorfile 500 {{ haproxy_errors_dir }}/500.http"
+      - "errorfile 502 {{ haproxy_errors_dir }}/502.http"
+      - "errorfile 503 {{ haproxy_errors_dir }}/503.http"
+      - "errorfile 504 {{ haproxy_errors_dir }}/504.http"
+haproxy_rings_vars: []
+haproxy_logforward_vars: []
+haproxy_modules_vars: []
+haproxy_resolvers_vars: []
+haproxy_listen_vars: []
+haproxy_frontend_vars:
+  - name: "prometheus"
+    vars:
+      - "mode http"
+      - "bind *:{{ haproxy_prometheus_port }}"
+      - "http-request use-service prometheus-exporter if { path /metrics }"
+      - "stats enable"
+      - "stats uri /stats"
+      - "stats refresh 10s"
+haproxy_backend_vars: []
+haproxy_error_files:
+  - state: 400
+    description: "Bad Request"
+    explanation: "You sent a malformed Request."
+    method: "close"
+  - state: 403
+    description: "Forbidden"
+    explanation: "You do not have Access to this Site."
+    method: "close"
+  - state: 408
+    description: "Request Timeout"
+    explanation: "Your Request timed out."
+    method: "close"
+  - state: 500
+    description: "Internal Server Error"
+    explanation: "There is an internal Server Error on our side."
+    method: "close"
+  - state: 502
+    description: "Bad Gateway"
+    explanation: "The Server could not redirect you."
+    method: "close"
+  - state: 503
+    description: "Service Unavailable"
+    explanation: "This Service is currently unavailable."
+    method: "close"
+  - state: 504
+    description: "Gateway Timeout"
+    explanation: "The Server could not redirect you in time."
+    method: "close"
+haproxy_lua_files: []
+haproxy_config_maps: []
+haproxy_validation_command: "haproxy -f %s -c -q"
+...

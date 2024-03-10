@@ -1,0 +1,70 @@
+# {{ ansible_managed }}
+{% if haproxy_global_vars | length > 0 %}
+{# GLOBAL SECTION #}
+{% include 'haproxy_global.j2' %}
+
+{% endif %}
+{% if haproxy_defaults_vars | length > 0 %}
+{# DEFAULTS SECTION #}
+{% include 'haproxy_defaults.j2' %}
+
+{% endif %}
+{% if haproxy_userlist_vars | length > 0 %}
+{# USERLIST SECTION #}
+{% include 'haproxy_userlist.j2' %}
+
+{% endif %}
+{% if haproxy_peers_vars | length > 0 %}
+{# PEERS SECTION #}
+{% include 'haproxy_peers.j2' %}
+
+{% endif %}
+{% if haproxy_mailers_vars | length > 0 %}
+{# MAILERS SECTION #}
+{% include 'haproxy_mailers.j2' %}
+
+{% endif %}
+{% if haproxy_programs_vars | length > 0 %}
+{# PROGRAMS SECTION #}
+{% include 'haproxy_programs.j2' %}
+
+{% endif %}
+{% if haproxy_httperrors_vars | length > 0 %}
+{# HTTP-ERRORS SECTION #}
+{% include 'haproxy_httperrors.j2' %}
+
+{% endif %}
+{% if haproxy_rings_vars | length > 0 %}
+{# RINGS SECTION #}
+{% include 'haproxy_rings.j2' %}
+
+{% endif %}
+{% if haproxy_logforward_vars | length > 0 %}
+{# LOG-FORWARD SECTION #}
+{% include 'haproxy_logforward.j2' %}
+
+{% endif %}
+{% if haproxy_modules_vars | length > 0 %}
+{# MODULES SECTION #}
+{% include 'haproxy_modules.j2' %}
+
+{% endif %}
+{% if haproxy_resolvers_vars | length > 0 %}
+{# RESOLVERS SECTION #}
+{% include 'haproxy_resolvers.j2' %}
+
+{% endif %}
+{% if haproxy_listen_vars | length > 0 %}
+{# LISTEN SECTION #}
+{% include 'haproxy_listen.j2' %}
+
+{% endif %}
+{% if haproxy_frontend_vars | length > 0 %}
+{# FRONTEND SECTION #}
+{% include 'haproxy_frontend.j2' %}
+
+{% endif %}
+{% if haproxy_backend_vars | length > 0 %}
+{# BACKEND CONIGURATION #}
+{% include 'haproxy_backend.j2' %}
+{% endif %}

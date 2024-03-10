@@ -1,0 +1,11 @@
+{% if haproxy_logforward_vars | length > 0 %}
+{% for logforward in haproxy_logforward_vars %}
+log-forward {{ logforward.name }}
+{% for logforward_var in logforward.vars %}
+  {{ logforward_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

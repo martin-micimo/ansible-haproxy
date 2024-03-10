@@ -1,0 +1,3 @@
+{% for value in item[item | first] %}
+{{ value }} {{ item[item | first][value] }}
+{% endfor %}

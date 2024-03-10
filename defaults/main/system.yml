@@ -1,0 +1,52 @@
+---
+haproxy_package_name: "haproxy"
+haproxy_package_state: "present"
+haproxy_service_name: "haproxy"
+haproxy_prometheus_port: 8404
+haproxy_user: "haproxy"
+haproxy_group: "haproxy"
+haproxy_log_file: "/var/log/haproxy.log"
+haproxy_debian_depentent_packages:
+  - gpg # For special apt repos and PPA
+haproxy_base_dir: "/etc/haproxy"
+haproxy_config_dir: "{{ haproxy_base_dir }}"
+haproxy_certs_dir: "{{ haproxy_config_dir }}/certs"
+haproxy_errors_dir: "{{ haproxy_config_dir }}/errors"
+haproxy_lua_dir: "{{ haproxy_config_dir }}/lua"
+haproxy_maps_dir: "{{ haproxy_config_dir }}/maps"
+haproxy_config_dirs:
+  - "{{ haproxy_config_dir }}"
+  - "{{ haproxy_certs_dir }}"
+  - "{{ haproxy_errors_dir }}"
+  - "{{ haproxy_lua_dir }}"
+  - "{{ haproxy_maps_dir }}"
+haproxy_selinux_packages:
+  - python3-selinux
+  - python3-sepolicy
+  - selinux-utils
+  - selinux-basics
+  - selinux-policy-default
+haproxy_selinux_ports: []
+haproxy_selinux_flags: []
+haproxy_selinux_policy: "default"
+haproxy_selinux_state: "permissive"
+haproxy_firewalld_ports: []
+haproxy_sysctl_settings: []
+haproxy_helper_scripts_packages:
+  - curl
+  - rsyslog
+  - procps
+  - coreutils
+haproxy_helper_scripts_dir: "/opt/haproxy"
+haproxy_helper_scripts:
+  - name: "haproxy_status.sh"
+    src: "haproxy_status.sh.j2"
+  - name: "haproxy_nurse.sh"
+    src: "haproxy_nurse.sh.j2"
+haproxy_helper_scripts_free_sys_mem: 1024
+haproxy_helper_scripts_max_idle_time: 300
+haproxy_helper_scripts_metrics_auth: ""
+haproxy_dhparams_packages:
+  - haveged # For faster dhparam file generation
+haproxy_dhparams_bits: 2048
+haproxy_dhparams_file: "{{ haproxy_config_dir }}/dhparams.pem"

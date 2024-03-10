@@ -1,0 +1,28 @@
+---
+- name: Haproxy Reload
+  ansible.builtin.service:
+    name: "{{ haproxy_service_name }}"
+    state: reloaded
+  when:
+    - haproxy_mode == "system"
+    - not haproxy_molecule_test
+
+- name: Haproxy Docker Reload
+  ansible.builtin.command: "docker kill -s USR2 {{ haproxy_docker_container_name }}"
+  when:
+    - haproxy_mode == "docker"
+    - haproxy_docker_compose | bool
+
+- name: Haproxy Docker Restart
+  ansible.builtin.command: "docker compose up --force-recreate -d"
+  args:
+    chdir: "{{ haproxy_docker_dir }}"
+  when:
+    - haproxy_mode == "docker"
+    - haproxy_docker_compose | bool
+
+- name: Apache Restart
+  ansible.builtin.systemd:
+    name: apache2
+    state: restarted
+...

@@ -1,0 +1,106 @@
+---
+- name: Official Docker Haproxy Setup.
+  hosts: local
+  gather_facts: true
+  become: true
+  roles:
+    - role: "../haproxy"
+  vars:
+    haproxy_mode: "docker"
+    haproxy_docker_compose: true
+    haproxy_version: "2.8.6"
+    haproxy_testing_mode: true
+    haproxy_docker_config_dir: "/usr/local/etc/haproxy"
+    haproxy_validation_command: "/bin/true %s"
+    haproxy_dhparams_create: true
+    haproxy_prometheus_port: 9404
+    haproxy_helper_scripts_metrics_auth: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      33346434653732636364643334303839633432396634323261643463303737343239636431663032
+      3738303165623032353936373064383631393733366164390a366566303932303436373563303933
+      30313735363137643735353632383631383038346239383236646132336537666362346462333036
+      3236646434653435370a313934626231303664623837393664623064356365326361356535306434
+      34336464346566356332396239373866313763663162626237313265313363643438
+    haproxy_prometheus_secret: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      64336533393735353032633233653937313761343464626365346535303938376230316339663465
+      6631613937613534353663363035313034613537656634620a356563396136333936373466633761
+      65373639623164613930316131323638343334316238323335656666373434363762376332343564
+      3731396431396438380a633932383466656139313163633164313632353635616131663166313562
+      3039
+    haproxy_helper_scripts_enabled: true
+    haproxy_global_vars:
+      - "log stdout local0 debug"
+      - "ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305"
+      - "ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"
+      - "ssl-default-bind-options prefer-client-ciphers no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets"
+      - "ssl-default-server-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305"
+      - "ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"
+      - "ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets"
+      - "ssl-dh-param-file {{ haproxy_docker_config_dir }}/dhparams.pem"
+    haproxy_httperrors_vars:
+      - name: "default_error_files"
+        vars:
+          - "errorfile 400 {{ haproxy_docker_config_dir }}/errors/400.http"
+          - "errorfile 403 {{ haproxy_docker_config_dir }}/errors/403.http"
+          - "errorfile 408 {{ haproxy_docker_config_dir }}/errors/408.http"
+          - "errorfile 500 {{ haproxy_docker_config_dir }}/errors/500.http"
+          - "errorfile 502 {{ haproxy_docker_config_dir }}/errors/502.http"
+          - "errorfile 503 {{ haproxy_docker_config_dir }}/errors/503.http"
+          - "errorfile 504 {{ haproxy_docker_config_dir }}/errors/504.http"
+    haproxy_userlist_vars:
+      - name: "mycredentials"
+        vars:
+          - "user prometheus insecure-password {{ haproxy_prometheus_secret }}"
+    haproxy_config_maps:
+      - http_hosts:
+          example.com: "be_default_http"
+          api.example.com: "be_api_http"
+      - https_hosts:
+          example.com: "be_default_https"
+          api.example.com: "be_api_https"
+    haproxy_frontend_vars:
+      - name: "prometheus"
+        vars:
+          - "mode http"
+          - "bind *:{{ haproxy_prometheus_port }}"
+          - "stats enable"
+          - "stats uri /stats"
+          - "stats refresh 10s"
+          - "http-request auth unless { http_auth(mycredentials) }"
+          - "acl metrics_path path /metrics"
+          - "http-request use-service prometheus-exporter if { path /metrics }"
+      - name: "http"
+        vars:
+          - "mode http"
+          - "bind *:80"
+          - "use_backend %[req.hdr(host),lower,map({{ haproxy_docker_config_dir }}/maps/http_hosts.map,be_default_http)]"
+      - name: "https"
+        vars:
+          - "mode http"
+          - "bind *:443 ssl crt {{ haproxy_docker_config_dir }}/certs/ alpn h2,http/1.1"
+          - "http-request set-header X-Real-IP %[src]"
+          - "http-request set-header X-Forwarded-Host %[req.hdr(host)]"
+          - "http-request set-header X-Forwarded-Port %[dst_port]"
+          - "http-request set-header X-Forwarded-For %[src]"
+          - "http-request set-header X-Forwarded-Proto https"
+          - "http-response set-header Strict-Transport-Security max-age=63072000"
+          - "use_backend %[req.hdr(host),lower,map({{ haproxy_docker_config_dir }}/maps/https_hosts.map,be_default_https)]"
+    haproxy_backend_vars:
+      - name: "be_default_http"
+        vars:
+          - "mode http"
+          - "server myfirstserver 172.17.0.1:8080 check"
+      - name: "be_api_http"
+        vars:
+          - "mode http"
+          - "server mysecondserver 172.17.0.1:8080 check"
+      - name: "be_default_https"
+        vars:
+          - "mode http"
+          - "server myfirstserver 172.17.0.1:8443 check"
+      - name: "be_api_https"
+        vars:
+          - "mode http"
+          - "server mysecondserver 172.17.0.1:8443 check"
+...

@@ -1,0 +1,11 @@
+{% if haproxy_rings_vars | length > 0 %}
+{% for rings in haproxy_rings_vars %}
+ring {{ rings.name }}
+{% for rings_var in rings.vars %}
+  {{ rings_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

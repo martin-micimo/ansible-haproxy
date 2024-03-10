@@ -1,0 +1,110 @@
+---
+# Debian Family Installation
+- name: Install depentent packages for Debian Distribution family.
+  ansible.builtin.apt:
+    name: "{{ haproxy_debian_depentent_packages }}"
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Repository GPG Key if needed.
+  ansible.builtin.apt_key:
+    url: "{{ haproxy_installer.key }}"
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+    - haproxy_installer.method == "repo"
+
+- name: Install Apt Repository.
+  ansible.builtin.apt_repository:
+    repo: "deb {{ haproxy_installer.repo }}"
+    state: present
+    filename: haproxy
+  when:
+    - ansible_os_family == "Debian"
+    - haproxy_installer.method == "repo"
+
+- name: Install PPA Repository.
+  ansible.builtin.apt_repository:
+    repo: "{{ haproxy_installer.ppa }}"
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+    - haproxy_installer.method == "ppa"
+
+- name: Update APT again for Debian Distribution family.
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Haproxy for Debian Distribution family.
+  ansible.builtin.apt:
+    name: "{{ haproxy_package_name }}={{ haproxy_version }}.*"
+    state: "{{ haproxy_package_state }}"
+    allow_downgrade: true
+  when:
+    - ansible_os_family == "Debian"
+    - haproxy_installer.set_version
+
+- name: Install Haproxy for Debian Disttribution family without specific Version.
+  ansible.builtin.apt:
+    name: "{{ haproxy_package_name }}"
+    state: "{{ haproxy_package_state }}"
+    allow_downgrade: true
+  when:
+    - ansible_os_family == "Debian"
+    - not haproxy_installer.set_version
+
+# Tool Installations
+- name: Install SELinux Packages.
+  ansible.builtin.apt:
+    name: "{{ item }}"
+  loop: "{{ haproxy_selinux_packages }}"
+  when:
+    - ansible_os_family == "Debian"
+    - haproxy_selinux_enabled
+
+# RedHat Family Installation
+- name: Get dnf Repositories.
+  ansible.builtin.command: dnf repolist
+  register: haproxy_dnf_repos
+  when:
+    - ansible_os_family == "RedHat"
+    - haproxy_show_debug
+
+- name: Show dnf Repositories.
+  ansible.builtin.debug:
+    msg: "{{ haproxy_dnf_repos.stdout_lines }}"
+  when:
+    - ansible_os_family == "RedHat"
+    - haproxy_show_debug
+
+- name: Install Haproxy for RedHat Distribution Family.
+  ansible.builtin.dnf:
+    name: "{{ haproxy_package_name }}"
+    state: "{{ haproxy_package_state }}"
+    allow_downgrade: true
+  when:
+    - ansible_os_family == "RedHat"
+    - not haproxy_installer.set_version
+
+# Early Directory Setup
+- name: Create Config Directories.
+  ansible.builtin.file:
+    state: directory
+    mode: "{{ item.mode | default('0755') }}"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    path: "{{ item }}"
+  loop: "{{ haproxy_config_dirs }}"
+
+# Debug Version Informations
+- name: Gather the package facts.
+  ansible.builtin.package_facts:
+    manager: auto
+  when: haproxy_show_debug
+
+- name: Print haproxy package facts.
+  ansible.builtin.debug:
+    msg: "{{ ansible_facts.packages['haproxy'][0].version }}"
+  when: haproxy_show_debug
+...

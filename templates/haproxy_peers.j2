@@ -1,0 +1,11 @@
+{% if haproxy_peers_vars | length > 0 %}
+{% for peers in haproxy_peers_vars %}
+peers {{ peers.name }}
+{% for peers_var in peers.vars %}
+  {{ peers_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

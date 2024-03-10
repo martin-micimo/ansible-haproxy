@@ -1,0 +1,11 @@
+{% if haproxy_httperrors_vars | length > 0 %}
+{% for httperrors in haproxy_httperrors_vars %}
+http-errors {{ httperrors.name }}
+{% for httperrors_var in httperrors.vars %}
+  {{ httperrors_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Martin Meier
+  description: Ansible HAProxy Role.
+  company: micimo GmbH
+  license: GPLv3
+  min_ansible_version: "2.4"
+  namespace: micimo
+  role_name: haproxy
+  galaxy_tags:
+    - haproxy
+    - docker
+    - loadbalancer
+    - network
+    - molecule
+
+dependencies: []

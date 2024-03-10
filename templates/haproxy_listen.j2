@@ -1,0 +1,11 @@
+{% if haproxy_listen_vars | length > 0 %}
+{% for listen in haproxy_listen_vars %}
+listen {{ listen.name }}
+{% for listen_var in listen.vars %}
+  {{ listen_var }}
+{% endfor %}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}
+{% endif %}

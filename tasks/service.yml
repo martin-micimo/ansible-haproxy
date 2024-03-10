@@ -1,0 +1,31 @@
+---
+- name: MOLECULE - Pause for Molecule Inspection.
+  ansible.builtin.pause:
+  when: haproxy_molecule_test
+
+- name: MOLECULE - Start HAProxy if on Debian Family OS.
+  ansible.builtin.service:
+    name: "{{ haproxy_service_name }}"
+    state: "{{ haproxy_service_state | default('started') }}"
+    enabled: "{{ haproxy_service_enabled | default(true) }}"
+  when:
+    - haproxy_molecule_test
+    - ansible_os_family == "Debian"
+    - haproxy_mode == "system"
+
+- name: MOLECULE - Start HAProxy if on RedHat Family OS.
+  ansible.builtin.command: "/usr/sbin/haproxy -D -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid"
+  when:
+    - haproxy_molecule_test
+    - ansible_os_family == "RedHat"
+    - haproxy_mode == "system"
+
+- name: Ensure haproxy is in desired state.
+  ansible.builtin.service:
+    name: "{{ haproxy_service_name }}"
+    state: "{{ haproxy_service_state | default('started') }}"
+    enabled: "{{ haproxy_service_enabled | default(true) }}"
+  when:
+    - not haproxy_molecule_test
+    - haproxy_mode == "system"
+...

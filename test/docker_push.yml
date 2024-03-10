@@ -1,0 +1,23 @@
+---
+- name: Docker Compose Haproxy Setup.
+  hosts: local
+  gather_facts: true
+  become: true
+  roles:
+    - role: "../haproxy"
+  vars:
+    haproxy_mode: "docker"
+    haproxy_docker_build: true
+    haproxy_docker_name: "registry.micimo.com/docker/experiment:3.0.0"
+    haproxy_docker_user: "harharproxy"
+    haproxy_docker_push: true
+    haproxy_frontend_vars:
+      - name: "foo"
+        vars:
+          - "bind :9001"
+          - "timeout client 5000"
+    haproxy_httperrors_vars: []
+    haproxy_error_files: []
+    haproxy_global_vars: []
+    haproxy_defaults_vars: []
+...

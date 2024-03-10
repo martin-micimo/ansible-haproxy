@@ -1,0 +1,81 @@
+#!/bin/bash
+set -euo pipefail
+
+# Haproxy memory watching and activity checking
+#
+# created by Martin Meier
+# for micimo GmbH 2024
+
+# SETUP
+# - add the following line to the crontab to have the script run every minute
+#   * * * * * /opt/haproxy/haproxy_nurse.sh >/dev/null 2>&1
+
+#######################
+#    Configuration    #
+#######################
+# This is the Amount of memory that should always be free on the System.
+HAPROXY_SYSTEM_MIN_FREE_MEM={{ haproxy_helper_scripts_free_sys_mem }}
+# This is the amount of time in seconds after that we declare haproxy dead and try to restart it.
+HAPROXY_MAX_IDLE_TIME={{ haproxy_helper_scripts_max_idle_time }}
+HAPROXY_NURSE_HOMEDIR={{ haproxy_helper_scripts_dir }}
+HAPROXY_LOGFILE={{ haproxy_log_file }}
+# Make sure you rotate this Log from time to time!
+HAPROXY_NURSE_LOGFILE=${HAPROXY_NURSE_HOMEDIR}/nurse.log
+TIMESTAMP=$(date)
+mkdir -p "${HAPROXY_NURSE_HOMEDIR}"
+pushd "${HAPROXY_NURSE_HOMEDIR}" > /dev/null || exit
+touch "${HAPROXY_NURSE_LOGFILE}"
+
+#####################################
+#    Verifying everything is OK     #
+#####################################
+if [[ "${EUID}" -ne 0 ]]; then
+	echo "Please run as root"
+	exit 1
+fi
+# A very rudimentary check to not run in conditions where the memory target is impossible to reach
+TOTAL_SYSTEM_MEM=$(free --mega | grep 'Mem:' | tr --squeeze-repeats ' ' | cut --delimiter ' ' --fields 2)
+MAX_FREE_MEM=$((TOTAL_SYSTEM_MEM - 1024))
+if [[ ${MAX_FREE_MEM} -lt ${HAPROXY_SYSTEM_MIN_FREE_MEM} ]]; then
+	echo "Memory: (${MAX_FREE_MEM} - 1024) is less than ${HAPROXY_SYSTEM_MIN_FREE_MEM}. Memory Target impossible to reach. Aborting Script!"
+	exit 1
+fi
+
+#################################################
+#     Checking Haproxy Memory Usage             #
+#################################################
+# Get the ammount of free momory
+FREE_MEM=$(free --mega | grep 'Mem:' | tr --squeeze-repeats ' ' | cut --delimiter ' ' --fields 4)
+# Report memory usage
+echo "${TIMESTAMP} - Free System Memory ${FREE_MEM}" >> "${HAPROXY_NURSE_LOGFILE}"
+# If there is too little free momory kill the oldest haproxy instance
+until [[ "${FREE_MEM}" -gt "${HAPROXY_SYSTEM_MIN_FREE_MEM}" ]]; do
+	OLDEST_HAPROXY_PID=$(pgrep --oldest --full /usr/sbin/haproxy)
+	kill "${OLDEST_HAPROXY_PID}"
+	echo "${TIMESTAMP} - killed oldest haproxy with PID ${OLDEST_HAPROXY_PID}" >> "${HAPROXY_NURSE_LOGFILE}"
+done
+
+#################################################
+#     Check that haproxy is not stuck           #
+#################################################
+# Get the amount of seconds since the last haproxy log entry
+SECONDS_DIFF=$(($(date +%s) - $(date --reference "${HAPROXY_LOGFILE}" +%s)))
+# Restart haproxy if it is bigger than $HAPROXY_MAX_IDLE_TIME sec
+if [[ "${SECONDS_DIFF}" -gt "${HAPROXY_MAX_IDLE_TIME}" ]]; then
+	if [[ ! -f "${HAPROXY_NURSE_HOMEDIR}"/haproxy_restart.lock ]]; then
+		echo "${TIMESTAMP} - Haproxy is stuck! No log entry for ${SECONDS_DIFF} seconds. Restarting Haproxy ..." >> "${HAPROXY_NURSE_LOGFILE}"
+		touch "${HAPROXY_NURSE_HOMEDIR}"/haproxy_restart.lock
+		echo "${TIMESTAMP} - $(systemctl --full --lines 0 status haproxy || true)" >> "${HAPROXY_NURSE_LOGFILE}"
+		echo "${TIMESTAMP} - Restarting haproxy ..." >> "${HAPROXY_NURSE_LOGFILE}"
+		systemctl restart haproxy
+		rm "${HAPROXY_NURSE_HOMEDIR}"/haproxy_restart.lock
+	else
+		echo "${TIMESTAMP} - Haproxy is still restarting, will not do it again" >> "${HAPROXY_NURSE_LOGFILE}"
+	fi
+else
+	echo "${TIMESTAMP} - Haproxy is awake. Last Log-Entry is ${SECONDS_DIFF} seconds old" >> "${HAPROXY_NURSE_LOGFILE}"
+fi
+
+# Exit cleany
+popd > /dev/null
+exit 0

@@ -1,0 +1,66 @@
+version: "V2"
+services:
+  {{ haproxy_docker_container_name }}:
+    image: {{ haproxy_docker_image }}
+    container_name: {{ haproxy_docker_container_name }}
+    restart: {{ haproxy_docker_restart_policy }}
+{% if haproxy_docker_cpus | length > 0 %}
+    cpus: "{{ haproxy_docker_cpus }}"
+{% endif %}
+{% if haproxy_docker_mem_reservation | length > 0 %}
+    mem_reservation: "{{ haproxy_docker_mem_reservation }}"
+{% endif %}
+{% if haproxy_docker_mem_limit | length > 0 %}
+    mem_limit: "{{ haproxy_docker_mem_limit }}"
+{% endif %}
+{% if haproxy_docker_mounts | length > 0 %}
+    volumes:
+{% for mount in haproxy_docker_mounts %}
+      - source: "{{ mount.source }}"
+        target: "{{ mount.target }}"
+        type: "{{ mount.type }}"
+{% endfor %}
+{% endif %}
+{% if haproxy_frontend_vars | length > 0 or haproxy_listen_vars | length > 0 or haproxy_docker_extra_ports | length > 0 %}
+    ports:
+{% for frontend in haproxy_frontend_vars %}
+{% for line in frontend.vars %}
+{% if line.startswith('bind') %}
+      - "{{ line.split(':')[1].split(' ') | first }}:{{ line.split(':')[1].split(' ') | first }}"
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% for listener in haproxy_listen_vars %}
+{% for line in listener.vars %}
+{% if line.startswith('bind') %}
+      - "{{ line.split(':')[1].split(' ') | first }}:{{ line.split(':')[1].split(' ') | first }}"
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% for ports in haproxy_docker_extra_ports %}
+      - "{{ ports }}"
+{% endfor %}
+{% endif %}
+{% if haproxy_docker_sysctls | length > 0 %}
+    sysctls:
+{% for sysctl in haproxy_docker_sysctls %}
+      - {{ sysctl }}
+{% endfor %}
+{% endif %}
+{% if haproxy_docker_log_options | length > 0 %}
+    logging:
+{% for logging in haproxy_docker_log_options %}
+      driver: "{{ logging.driver }}"
+{% if logging.options | length > 0 %}
+      options:
+{% for key, value in logging.options.items() %}
+        {{ key }}: "{{ value }}"
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if haproxy_docker_service_extra_settings | length > 0 %}
+{% for extra_setting in haproxy_docker_service_extra_settings %}
+    {{ extra_setting }}
+{% endfor %}
+{% endif %}

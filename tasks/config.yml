@@ -1,0 +1,51 @@
+---
+- name: Find out if the haproxy_dhparams_file exists.
+  ansible.builtin.stat:
+    path: "{{ haproxy_dhparams_file }}"
+  register: haproxy_dhaparams_file_stat
+  when: haproxy_dhparams_create | bool
+
+- name: Create dhparams File.
+  ansible.builtin.command: "openssl dhparam -out {{ haproxy_dhparams_file }} {{ haproxy_dhparams_bits }}"
+  when:
+    - haproxy_dhparams_create | bool
+    - not haproxy_dhaparams_file_stat.stat.exists
+
+- name: Template Error Pages.
+  ansible.builtin.template:
+    src: "errorpage.http.j2"
+    dest: "{{ haproxy_errors_dir }}/{{ item.state }}.http"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    mode: "0644"
+  loop: "{{ haproxy_error_files }}"
+  notify: "Haproxy Reload"
+
+- name: Copy LUA Files.
+  ansible.builtin.copy:
+    src: "lua/{{ item }}"
+    dest: "{{ haproxy_lua_dir }}/{{ item }}"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    mode: "0644"
+  loop: "{{ haproxy_lua_files }}"
+  notify: "Haproxy Reload"
+
+- name: Template Configmaps.
+  ansible.builtin.template:
+    src: "configmap.map.j2"
+    dest: "{{ haproxy_maps_dir }}/{{ item | flatten | first }}.map"
+    mode: "0644"
+  loop: "{{ haproxy_config_maps }}"
+  notify: "Haproxy Reload"
+
+- name: Template haproxy.cfg.
+  ansible.builtin.template:
+    src: "haproxy.cfg.j2"
+    dest: "{{ haproxy_base_dir }}/{{ haproxy_config_file }}"
+    mode: "0644"
+    validate: "{{ haproxy_validation_command }}"
+  notify:
+    - "Haproxy Reload"
+    - "Haproxy Docker Reload"
+...

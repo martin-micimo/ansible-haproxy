@@ -1,0 +1,3 @@
+ansible-venv/*
+molecule/default/test/*
+.ansible-vault

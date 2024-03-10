@@ -1,0 +1,50 @@
+---
+- name: Template Dockerfile.
+  ansible.builtin.template:
+    src: "haproxy_Dockerfile.j2"
+    dest: "{{ haproxy_docker_dir }}/Dockerfile"
+    mode: "0644"
+  when: haproxy_docker_build | bool
+
+- name: Template docker-compose.yml.
+  ansible.builtin.template:
+    src: "haproxy_docker-compose.yml.j2"
+    dest: "{{ haproxy_docker_dir }}/docker-compose.yml"
+    mode: "0644"
+  notify: "Haproxy Docker Restart"
+  when: haproxy_docker_compose | bool
+
+- name: Check if the Docker Image already exists.
+  community.docker.docker_image_info:
+    name: "{{ haproxy_docker_name }}:{{ haproxy_docker_patch_version }}"
+  register: haproxy_image_built
+  when: haproxy_docker_build | bool
+
+- name: Build and optionally push the Docker Image.
+  community.docker.docker_image:
+    source: build
+    build:
+      path: "{{ haproxy_docker_dir }}"
+    name: "{{ haproxy_docker_name }}"
+    tag: "{{ haproxy_docker_patch_version }}"
+    push: "{{ haproxy_docker_push | bool }}"
+  when:
+    - haproxy_docker_build | bool
+    - haproxy_image_built.images | length < 1
+
+- name: Check if the Container is already running.
+  ansible.builtin.command: "docker compose ls -q"
+  args:
+    chdir: "{{ haproxy_docker_dir }}"
+  register: haproxy_docker_compose_running
+  when: haproxy_docker_compose | bool
+  changed_when: false
+
+- name: Start the Docker Container with Docker Compose.
+  ansible.builtin.command: docker compose up -d --remove-orphans
+  args:
+    chdir: "{{ haproxy_docker_dir }}"
+  when:
+    - haproxy_docker_compose | bool
+    - haproxy_docker_name not in haproxy_docker_compose_running.stdout
+...
