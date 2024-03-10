@@ -15,6 +15,12 @@ and this project adheres to [Intended Effort Versioning (EffVer)](https://jacobt
 
 ### Removed
 
+## 1.0.4 - 2024-03-10
+
+### Changed
+
+- Switch to installing Ansible to Publish the Galaxy Role
+
 ## 1.0.3 - 2024-03-10
 
 ### Changed
