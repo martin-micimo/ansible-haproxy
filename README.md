@@ -9,12 +9,12 @@
 [![Jinja](https://img.shields.io/badge/jinja-%23B41717.svg?style=for-the-badge&logo=jinja&logoColor=white)](https://palletsprojects.com/p/jinja/)
 [![Bash](https://img.shields.io/badge/bash-%234EAA25.svg?style=for-the-badge&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
 
-[![CI](https://github.com/micimo-gmbh/ansible-haproxy/workflows/CI/badge.svg?event=push)](https://github.com/micimo-gmbh/ansible-haproxy/actions?query=workflow%3ACI)
-[![Actions Status](https://github.com/micimo-gmbh/ansible-haproxy/workflows/Molecule/badge.svg)](https://github.com/micimo-gmbh/ansible-haproxy/actions)
-[![Issues](https://img.shields.io/github/issues/micimo-gmbh/ansible-haproxy.svg)](https://github.com/micimo-gmbh/ansible-haproxy/issues/)
-[![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/micimo-gmbh/ansible-haproxy.svg)](https://github.com/micimo-gmbh/ansible-haproxy/pulls/)
+[![CI](https://github.com/martin-micimo/ansible-haproxy/workflows/Anible+Galaxy+Publish/badge.svg?event=push)](https://github.com/martin-micimo/ansible-haproxy/actions?query=Anible+Galaxy+Publish)
+[![Actions Status](https://github.com/martin-micimo/ansible-haproxy/workflows/Molecule/badge.svg)](https://github.com/martin-micimo/ansible-haproxy/actions)
+[![Issues](https://img.shields.io/github/issues/martin-micimo/ansible-haproxy.svg)](https://github.com/martin-micimo/ansible-haproxy/issues/)
+[![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/martin-micimo/ansible-haproxy.svg)](https://github.com/martin-micimo/ansible-haproxy/pulls/)
 
-[![Galaxy](https://img.shields.io/badge/galaxy-martin-micimo.haproxy-blue.svg?style=flat-square)](https://galaxy.ansible.com/martin-micimo/haproxy)
+[![Galaxy](https://img.shields.io/badge/galaxy-martin-micimo.haproxy-blue.svg?style=flat-square)](https://galaxy.ansible.com/ui/standalone/roles/martin-micimo/haproxy)
 [![Ansible Role Downloads](https://img.shields.io/ansible/role/d/martin-micimo/haproxy)](https://galaxy.ansible.com/ui/standalone/roles/martin-micimo/haproxy/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 [![Latest Release](https://img.shields.io/github/v/release/micimo-gmbh/ansible-haproxy)](https://github.com/micimo-gmbh/ansible-haproxy/releases)
