@@ -15,6 +15,12 @@ and this project adheres to [Intended Effort Versioning (EffVer)](https://jacobt
 
 ### Removed
 
+## 1.0.3 - 2024-03-10
+
+### Changed
+
+- Switch to [Publish Ansible role to Galaxy](https://github.com/marketplace/actions/publish-ansible-role-to-galaxy) Action.
+
 ## 1.0.2 - 2024-03-10
 
 ### Fixed
