@@ -15,6 +15,12 @@ and this project adheres to [Intended Effort Versioning (EffVer)](https://jacobt
 
 ### Removed
 
+## 1.0.1 - 2024-03-10
+
+### Fixed
+
+- Run Github Workflow on an [existing Runner](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners)
+
 ## 1.0.0 - 2024-03-10
 
 ### Added
