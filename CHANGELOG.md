@@ -15,6 +15,14 @@ and this project adheres to [Intended Effort Versioning (EffVer)](https://jacobt
 
 ### Removed
 
+## 1.0.5 - 2024-03-11
+
+### Fixed
+
+- README Badges
+- Ansible Galaxy Role Name in Examples
+- GitHub Workflow
+
 ## 1.0.4 - 2024-03-10
 
 ### Changed
