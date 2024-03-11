@@ -14,7 +14,7 @@
 
 [![Ansible Role Downloads](https://img.shields.io/ansible/role/d/martin-micimo/haproxy)](https://galaxy.ansible.com/ui/standalone/roles/martin-micimo/haproxy/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-[![Latest Release](https://img.shields.io/github/v/release/micimo-gmbh/ansible-haproxy)](https://github.com/micimo-gmbh/ansible-haproxy/releases)
+[![Latest Release](https://img.shields.io/github/v/release/martin-micimo/ansible-haproxy)](https://github.com/martin-micimo/ansible-haproxy/releases)
 [![EffVer Versioning](https://img.shields.io/badge/version_scheme-EffVer-0097a7)](https://jacobtomlinson.dev/effver)
 
 # Ansible HAProxy Role
