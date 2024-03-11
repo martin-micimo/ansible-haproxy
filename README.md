@@ -9,12 +9,9 @@
 [![Jinja](https://img.shields.io/badge/jinja-%23B41717.svg?style=for-the-badge&logo=jinja&logoColor=white)](https://palletsprojects.com/p/jinja/)
 [![Bash](https://img.shields.io/badge/bash-%234EAA25.svg?style=for-the-badge&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
 
-[![CI](https://github.com/martin-micimo/ansible-haproxy/workflows/Anible+Galaxy+Publish/badge.svg?event=push)](https://github.com/martin-micimo/ansible-haproxy/actions?query=Anible+Galaxy+Publish)
-[![Actions Status](https://github.com/martin-micimo/ansible-haproxy/workflows/Molecule/badge.svg)](https://github.com/martin-micimo/ansible-haproxy/actions)
 [![Issues](https://img.shields.io/github/issues/martin-micimo/ansible-haproxy.svg)](https://github.com/martin-micimo/ansible-haproxy/issues/)
 [![PullRequests](https://img.shields.io/github/issues-pr-closed-raw/martin-micimo/ansible-haproxy.svg)](https://github.com/martin-micimo/ansible-haproxy/pulls/)
 
-[![Galaxy](https://img.shields.io/badge/galaxy-martin-micimo.haproxy-blue.svg?style=flat-square)](https://galaxy.ansible.com/ui/standalone/roles/martin-micimo/haproxy)
 [![Ansible Role Downloads](https://img.shields.io/ansible/role/d/martin-micimo/haproxy)](https://galaxy.ansible.com/ui/standalone/roles/martin-micimo/haproxy/)
 [![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 [![Latest Release](https://img.shields.io/github/v/release/micimo-gmbh/ansible-haproxy)](https://github.com/micimo-gmbh/ansible-haproxy/releases)
@@ -816,14 +813,14 @@ To use this Role install it from the Ansible Galaxy
 Eighter from Shell on your local machine:
 
 ```shell
-ansible-galaxy role install micimo.haproxy
+ansible-galaxy role install martin-micimo.haproxy
 ```
 
 Or put it into a `requirements.yml` that can be installed with `ansible-galaxy install -r requirements.yml`
 
 ```yaml
 roles:
-  - name: micimo.haproxy
+  - name: martin-micimo.haproxy
 ```
 
 For all Requirements for this Project look at the [requirements.yml](requirements.yml)
@@ -844,7 +841,7 @@ This will set up:
   gather_facts: true
   become: true
   roles:
-    - role: micimo.haproxy
+    - role: martin-micimo.haproxy
   vars:
     haproxy_mode: "system"
     haproxy_frontend_vars:
@@ -895,7 +892,7 @@ This will set up:
   gather_facts: true
   become: true
   roles:
-    - role: micimo.haproxy
+    - role: martin-micimo.haproxy
   vars:
     haproxy_mode: "system"
     haproxy_version: "2.6"
@@ -1006,7 +1003,7 @@ This will set up:
   gather_facts: true
   become: true
   roles:
-    - role: micimo.haproxy
+    - role: martin-micimo.haproxy
   vars:
     haproxy_mode: "docker"
     haproxy_docker_build: true
@@ -1061,7 +1058,7 @@ This will set up:
   gather_facts: true
   become: true
   roles:
-    - role: micimo.haproxy
+    - role: martin-micimo.haproxy
   vars:
     haproxy_mode: "docker"
     haproxy_docker_build: true
@@ -1096,7 +1093,7 @@ This will set up:
   gather_facts: true
   become: true
   roles:
-    - role: micimo.haproxy
+    - role: martin-micimo.haproxy
   vars:
     haproxy_mode: "docker"
     haproxy_docker_compose: true
