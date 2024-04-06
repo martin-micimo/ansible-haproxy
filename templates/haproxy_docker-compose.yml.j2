@@ -64,3 +64,9 @@ services:
     {{ extra_setting }}
 {% endfor %}
 {% endif %}
+{% if haproxy_docker_healthcheck | length > 0 %}
+    healthcheck:
+{% for healthcheck_line in haproxy_docker_healthcheck %}
+      {{ healthcheck_line }}
+{% endfor %}
+{% endif %}

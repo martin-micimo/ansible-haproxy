@@ -31,7 +31,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 
 ## What is it not for
 
-- Very simple HAProxy Setups running directly on a Server. You should instead just install the haproxy Package and template the Configuration yourself.
+- Very simple HAProxy Setups running directly on a Server. You should instead just install the HAProxy Package and template the Configuration yourself.
 - Very simple HAProxy Kubernetes Setups. You should use the [official HAProxy Docker Image](https://hub.docker.com/_/haproxy/) instead.
 
 # Table of Contents
@@ -52,7 +52,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
   - [Docker Mode](#docker-mode)
     - [Supported Versions](#supported-versions)
     - [Building, Naming, Tagging and Pushing of the Image](#building-naming-tagging-and-pushing-of-the-image)
-    - [Running the Image localy](#running-the-image-localy)
+    - [Running the Image locally](#running-the-image-locally)
     - [Run a prebuild Image](#run-a-prebuild-image)
 - [HAProxy Configuration](#haproxy-configuration)
   - [Default Configuration](#default-configuration)
@@ -72,7 +72,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
   - [Playbook Docker Compose](#playbook-docker-compose)
   - [Playbook Docker Push](#playbook-docker-push)
   - [Playbook Docker official Image](#playbook-docker-official-image)
-- [Tipps and Tricks](#tipps-and-tricks)
+- [Tips and Tricks](#tipps-and-tricks)
 - [License](#license)
 - [Authors](#authors)
 
@@ -81,11 +81,11 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 - [x] All available Sections of the haproxy.cfg can be fully templated by using customizable Variables.
 - [x] Works on many Distributions.
 - [x] Supports building a customized Docker Image and running it.
-- [x] Customizable Errorpages.
+- [x] Customizable Error pages.
 - [x] HAProxy Configmap Support.
 - [X] LUA Script Support.
 - [X] Default Prometheus Metrics.
-- [X] Support for Firewalld, SELinux and sysctl Settings.
+- [X] Support for Firewalld, SELinux and Sysctl Settings.
 
 # Supported Distributions
 
@@ -107,7 +107,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 
 Currently this Role Supports two Modes to run HAProxy:
 
-- [System](#system-mode): Haproxy runs as a process on a Server.
+- [System](#system-mode): HAProxy runs as a process on a Server.
 - [Docker](#docker-mode): Allows you to run/build HAProxy in/for a Docker/Kubernetes Environment.
 
 The behavior is set by this Variable:
@@ -119,12 +119,12 @@ The behavior is set by this Variable:
 ## System Mode
 
 In System Mode this Role assumes
-- ... that the Installation of the HAProxy Package will create a HAProxy User (normaly haproxy) that the Process will run in.
+- ... that the Installation of the HAProxy Package will create a HAProxy User (normally haproxy) that the Process will run in.
   - You can modify the `haproxy_user` and `haproxy_group` Variable if this is not the case.
   - This Role does not cover the Creation of this User.
 - ... that the Service on the System will be managed by Systemd.
 - ... that you have SELinux set up already if you want to use it in this Role.
-- ... that you have FirewallD set up already if you want to use it in this Role.
+- ... that you have Firewalld set up already if you want to use it in this Role.
 
 ## Version Matrix
 
@@ -191,7 +191,7 @@ The SELinux Packages for the RedHat OS Family are overwritten in `vars/RedHat.ym
 
 ### Firewalld
 
-:warning: If you want to use FirewallD Settings, this Role assumes, that you already habe FirewallD installed and enabled on the System. For more complicated Setups I would suggest using a dedicated Role.
+:warning: If you want to use Firewalld Settings, this Role assumes, that you already have Firewalld installed and enabled on the System. For more complicated Setups I would suggest using a dedicated Role.
 
 These Variables give you some limited control over Firewalld Settings:
 
@@ -228,15 +228,15 @@ If enabled with `haproxy_helper_scripts_enabled: true` this Role will add two He
 |Name|Description|
 |:--|:--|
 |`{{ haproxy_helper_scripts_dir }}/haproxy_status.sh`|Outputs a Status of the HAProxy (using the Prometheus Exporter)|
-|`{{ haproxy_helper_scripts_dir }}/haproxy_nurse.sh`|Experimental: Self-Healing Script for ultra hight usage Scenarios to keep Memory usage at bay|
+|`{{ haproxy_helper_scripts_dir }}/haproxy_nurse.sh`|Experimental: Self-Healing Script for ultra high usage Scenarios to keep Memory usage at bay|
 
 These Variables let you configure the Behaviour of the Helper Scripts:
 
-|Name|Default|Decription|
+|Name|Default|Description|
 |:--|:--|:--|
 |`haproxy_helper_scripts_dir`|"/opt/haproxy"|Path where the Helper Scripts live|
 |`haproxy_helper_scripts_metrics_auth`|""|Basic Auth Credentials for the Prometheus Exporter in the Format `-u prometheus:foobar`|
-|`haproxy_helper_scripts_free_sys_mem`|1024|Memory in MegaBytes that should be free on the System|
+|`haproxy_helper_scripts_free_sys_mem`|1024|Memory in Megabytes that should be free on the System|
 |`haproxy_helper_scripts_max_idle_time`|300|Amount of Seconds with no Log events after that we declare HAProxy unresponsive|
 
 :warning: For the `haproxy_nurse.sh` Script to work, rsyslog will be installed, to ensure that `{{ haproxy_log_file }}` exists and is written to instead of journald. Maybe you have to restart the System in certain conditions in order for the Log to appear.
@@ -273,7 +273,7 @@ You can use this Role to build and push a customized Docker Image that is a litt
 |:--|:--|:--|
 |`haproxy_docker_build`|true|Build the Docker Image|
 |`haproxy_docker_push`|false|Push the Docker Image, only works together with Building|
-|`haproxy_docker_name`|"haproxy"|The Basename of the Image that will be build. If you plan to push it, [prefix it with your Docker Registry Address](https://docs.docker.com/engine/reference/commandline/image_push/#push-a-new-image-to-a-registry)|
+|`haproxy_docker_name`|"haproxy"|The Base name of the Image that will be build. If you plan to push it, [prefix it with your Docker Registry Address](https://docs.docker.com/engine/reference/commandline/image_push/#push-a-new-image-to-a-registry)|
 |`haproxy_docker_image`|`"{{ haproxy_docker_name }}:{{ haproxy_docker_patch_version }}"`|You should not overwrite this directly, if you plan to Build and/or Push. Only when you want to run an other Image.|
 
 These are the possible Customizations:
@@ -288,9 +288,9 @@ These are the possible Customizations:
 |`haproxy_docker_makeopts`|TARGET=linux-glibc<br>USE_GETADDRINFO=1<br>USE_LUA=1<br>LUA_INC=/usr/include/lua5.3<br>USE_OPENSSL=1<br>USE_PCRE2=1<br>USE_PCRE2_JIT=1<br>USE_PROMEX=1<br>EXTRA_OBJS=""|Make Options for HAProxy, if you change these you are on your own.|
 |`haproxy_docker_commands`|"-W",<br>"-db",<br>"-f",<br>"{{ haproxy_docker_config_dir }}/{{ haproxy_config_file }}"|The build in HAProxy Start Command, if you change these you are on your own.|
 
-### Running the Image localy
+### Running the Image locally
 
-You can Run the Image localy with the Support of the `docker-compose-plugin` like this:
+You can Run the Image locally with the Support of the `docker-compose-plugin` like this:
 
 |Variable|Default|Description|
 |:--|:--|:--|
@@ -300,15 +300,17 @@ You can Run the Image localy with the Support of the `docker-compose-plugin` lik
 |`haproxy_docker_restart_policy`|"always"|You should keep this at [always or unless-stopped](https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart) to have the Service start after Reboot.|
 |`haproxy_docker_sysctls`|["net.ipv4.ip_unprivileged_port_start=0"]|You should keep this if you want HAProxy to serve Ports below 1024, if you add more you are on your own.|
 |`haproxy_docker_log_options`|[driver: "json-file", options: [max-size: "10m", max-file: "1"]]|We do not want Docker to fill our Drives with Logs.|
-|`haproxy_docker_extra_ports`|[]|Add a List of extra Ports in the Format `"<host_port>:<container_port>"` that are not in haproxy_frontend_vars or haproxy_listener_vars (added automaticaly).|
+|`haproxy_docker_extra_ports`|[]|Add a List of extra Ports in the Format `"<host_port>:<container_port>"` that are not in haproxy_frontend_vars or haproxy_listener_vars (added automatically).|
 |`haproxy_docker_cpu_count`|"1"|The Containers [cpus_count](https://docs.docker.com/compose/compose-file/05-services/#cpu_count) Setting.|
 |`haproxy_docker_memory_reservation`|"0.5g"|The Containers [--memory-reservation](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
 |`haproxy_docker_memory`|"1g"|The Containers [--memory](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
 |`haproxy_docker_service_extra_settings`|[]|A List of [services top-level variables](https://docs.docker.com/compose/compose-file/05-services/) not set in other settings above. In the Format `<setting>: <value>`|
+|`haproxy_docker_healthcheck`|['test: ["CMD", "haproxy", "-c", "-f" "{{ haproxy_docker_config_dir }}/haproxy.cfg"]', 'interval: 10s', 'timeout: 10s', 'retries: 3']|A Healthcheck for the Docker Container|
+
 
 You can find required CPU and memory Settings for your Setup [here](https://www.haproxy.com/documentation/haproxy-enterprise/getting-started/installation/linux/). You should always set Limitations for your Containers, because they can [impact the Host](https://docs.docker.com/config/containers/resource_constraints/).
 
-If you want to Reload the Haproxy inside the Container execute this command: `docker kill -s USR2 {{ haproxy_docker_container_name }}`. Very usefull after renewing TLS Certificates. On Configuration Change this Role also does this in the "Reload Docker Haproxy" Handler.
+If you want to Reload the HAProxy inside the Container execute this command: `docker kill -s USR2 {{ haproxy_docker_container_name }}`. Very useful after renewing TLS Certificates. On Configuration Change this Role also does this in the "Reload Docker HAProxy" Handler.
 
 ### Run a prebuild Image
 
@@ -321,7 +323,7 @@ If you plan to use the [Official Image](https://hub.docker.com/_/haproxy/) or an
 
 Look at the [Playbook Docker official Image](#playbook-docker-official-image) Section for an Example on how to do this.
 
-# Haproxy Configuration
+# HAProxy Configuration
 
 The Configuration Sections are separated into different Variables.
 
@@ -437,9 +439,9 @@ A full Configuration Example can be found in `test/haproxy_full.yml`
 
 ## TLS Certificates
 
-This Role wants you to have the Creation and Management of your TLS Certificates in a seperate Role.
+This Role wants you to have the Creation and Management of your TLS Certificates in a separate Role.
 
-The Certificates (or Symlinkt to them) should be present in the `/etc/haproxy/certs` directory in the [PEM combined Format](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/#tls-between-the-load-balancer-and-clients) that HAProxy understands. They should be imported in your HTTPS Frontend (as a directory) like this:
+The Certificates (or Symlink to them) should be present in the `/etc/haproxy/certs` directory in the [PEM combined Format](https://www.haproxy.com/documentation/haproxy-configuration-tutorials/ssl-tls/#tls-between-the-load-balancer-and-clients) that HAProxy understands. They should be imported in your HTTPS Frontend (as a directory) like this:
 
 ```yaml
 haproxy_global_vars:
@@ -476,15 +478,15 @@ In order to help with the Integration of TLS Certificates, this Role has some Sw
 |`haproxy_dhparams_bits`|2048|The Size of the Diffie-Hellman Parameters for the dhparams File.|
 |`haproxy_dhparams_file`|`"{{ haproxy_config_dir }}/dhparams.pem"`|Full Path where to store the dhparams.pem File.|
 
-Usualy it is completely sufficient to reload Haproxy via `systemctl reload haproxy.service` in order for all new Connections to get new Certificates.
+Usually it is completely sufficient to reload HAProxy via `systemctl reload haproxy.service` in order for all new Connections to get new Certificates.
 
 There is a Solution on how to [integrate acme.sh](https://www.haproxy.com/blog/haproxy-and-let-s-encrypt) to work with HAProxy. Here the Admin Socket is used to put the Certificates directly into HAProxy's memory during execution.
 
 ## Logging
 
-Normaly the HAPhroxy Package includes a file `/etc/logrotate.d/haproxy`, that rotates the file `/var/log/haproxy.log`. This Logfile is written to via the RSyslog Settings in `/etc/rsyslog.d/49-haproxy.conf` and works from the more secure [chrooted Environment](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#3.1-chroot) too.
+Normally the HAProxy Package includes a file `/etc/logrotate.d/haproxy`, that rotates the file `/var/log/haproxy.log`. This Log file is written to via the Rsyslog Settings in `/etc/rsyslog.d/49-haproxy.conf` and works from the more secure [chrooted Environment](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#3.1-chroot) too.
 
-Idealy you just have to keep the default **global** Settings. Alternatively you should include these Settings in your individual `haproxy_global_vars` for Logging to work:
+Ideally you just have to keep the default **global** Settings. Alternatively you should include these Settings in your individual `haproxy_global_vars` for Logging to work:
 
 ```yaml
 haproxy_global_vars:
@@ -497,18 +499,18 @@ haproxy_global_vars:
   ...
 ```
 
-You can fiddle with the Location of the Logfile by using these Settings:
+You can fiddle with the Location of the Log file by using these Settings:
 
 |Variable|Default|Description|
 |:--|:--|:--|
-|`haproxy_config_logrotate`|false|Enables individual Logrotation Config.|
-|`haproxy_log_file`|"/var/log/haproxy.log"|The Logfile Location.|
+|`haproxy_config_logrotate`|false|Enables individual Log rotation configuration.|
+|`haproxy_log_file`|"/var/log/haproxy.log"|The Log file Location.|
 
 You may individualize the default Log Formats as described in the [Documentation](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#8.2) in your **global** Configuration Section.
 
-More Informations about [Configuring Haproxy Logging](https://sematext.com/blog/haproxy-logs/).
+More Information about [Configuring HAProxy Logging](https://sematext.com/blog/haproxy-logs/).
 
-If you are running haproxy as the Entrypoint of a Docker Container, you want to log directly to stdout like this:
+If you are running HAProxy as the Entrypoint of a Docker Container, you want to log directly to stdout like this:
 
 ```
 haproxy_global_vars:
@@ -518,7 +520,7 @@ haproxy_global_vars:
 
 ## Secrets
 
-You may want to Encrypt certain sensitive Informations in your Playbook/Inventory Variables.
+You may want to Encrypt certain sensitive Information in your Playbook/Inventory Variables.
 
 For this you have to create a Secret variable like this:
 
@@ -572,7 +574,7 @@ There are other good methods of providing a [Vault Key for Ansible](https://docs
 
 By Default this Role comes with the [Prometheus Metrics Plugin](https://www.haproxy.com/blog/haproxy-exposes-a-prometheus-metrics-endpoint) enabled on the localhost Port **8404** as defined in the `haproxy_prometheus_port` Variable.
 
-It is configured in the Default prometheus Frontend:
+It is configured in the Default Prometheus Frontend:
 
 ```yaml
 haproxy_frontend_vars:
@@ -630,7 +632,7 @@ scrape_configs:
 ...
 ```
 
-:warning: Make sure not to expose the HAProxy Metrics to the Internet unsecured, as they can be used to attack your Loadbalancer. Secure the Port behind a Firewall and use at least BasicAuth.
+:warning: Make sure not to expose the HAProxy Metrics to the Internet unsecured, as they can be used to attack your LoadBalancer. Secure the Port behind a Firewall and use at least BasicAuth.
 
 If you have [Grafana](https://grafana.com/) you may want to use [Dashboard 12693](https://grafana.com/grafana/dashboards/12693-haproxy-2-full/) to get the most out of the Prometheus Metrics.
 
@@ -659,7 +661,7 @@ Content-Type: text/html
 
 The Option [errorfile](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#4-errorfile) can be defined in all proxy Sections (**defaults**, **frontend**, **listen** and **backend**) of the Configuration. Groups of Error Files can be defined in the **http-errors** section for later use with the [errorfiles](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#4.2-errorfiles) option.
 
-These are the Default Errorpages:
+These are the Default Error pages:
 
 ```yaml
 haproxy_error_files:
@@ -714,13 +716,13 @@ Content-Type: text/html
 </html>
 ```
 
-All Error Files will be created in the Subdirectory **errors/** of the Config Directory having the Name `{{ item.state }}.http`. By Default there is a **http-errors** Section in the Configuration that will be used in the **default** Section for all Proxy Sections.
+All Error Files will be created in the Sub directory **errors/** of the Config Directory having the Name `{{ item.state }}.http`. By Default there is a **http-errors** Section in the Configuration that will be used in the **default** Section for all Proxy Sections.
 
 Since Error Pages are [highly customizable](https://www.haproxy.com/blog/serve-dynamic-custom-error-pages-with-haproxy) please feel free to modify the Template and the `haproxy_error_files` and `haproxy_httperrors_vars` Variables according to your needs.
 
 ## Configmaps
 
-HAProxy supports [Configuration Maps](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#7.3.1-map) that are Key Value Pairs seperated by a whitespace:
+HAProxy supports [Configuration Maps](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#7.3.1-map) that are Key Value Pairs separated by a white space:
 
 ```
 example.com           be_default
@@ -756,11 +758,11 @@ haproxy_config_maps:
       api.example.com: "be_api"
 ```
 
-All Configmaps will be created in the Subdirectory **maps/** of the Config Directory having the File Ending `.map`
+All Configmaps will be created in the Sub directory **maps/** of the Config Directory having the File Ending `.map`
 
 ## LUA Files
 
-You can [extend the functioanlity of HAProxy](https://www.haproxy.com/blog/5-ways-to-extend-haproxy-with-lua) with the use of [LUA](https://www.lua.org/) Scripts.
+You can [extend the functionality of HAProxy](https://www.haproxy.com/blog/5-ways-to-extend-haproxy-with-lua) with the use of [LUA](https://www.lua.org/) Scripts.
 
 You have to put your **.lua** Files into the `files/lua/` Directory and include the Filename in the `haproxy_lua_files` List. Then modify the Configuration to load and use them.
 
@@ -771,25 +773,25 @@ Enable the Use of LUA Files by using these Variables:
 |`haproxy_lua_dir`|`"{{ haproxy_config_dir }}/lua"`|The Path where the LUA Files should be stored.|
 |`haproxy_lua_files`|[]|A List of files that should be copied into the `haproxy_lua_dir`.|
 
-All LUA Files will be created in the Subdirectory **lua/** of the Config Directory.
+All LUA Files will be created in the Sub directory **lua/** of the Config Directory.
 
 # Role Steering Variables
 
 |Name|Optional|Mode|Default|Description|
 |:--|:--|:--|:--|:--|
 |`haproxy_mode`|false|both|"system"|Can be one of `system` or `docker`|
-|`haproxy_helper_scripts_enabled`|true|both|false|Install the Helper Scipts|
+|`haproxy_helper_scripts_enabled`|true|both|false|Install the Helper Scripts|
 |`haproxy_dhparams_create`|true|both|false|Create a dhparams File|
 |`haproxy_dhparams_speedup`|true|both|false|Speedup Entropy Generation on older Kernels|
-|`haproxy_config_file`|true|both|"haproxy.cfg"|The Name of the Haproxy Configuration|
+|`haproxy_config_file`|true|both|"haproxy.cfg"|The Name of the HAProxy Configuration|
 |`haproxy_docker_build`|true|docker|false|Select if you want to build a Docker Image|
 |`haproxy_docker_push`|true|docker|false|Select if you want to push the Image to a Registry|
 |`haproxy_docker_compose`|true|docker|false|Select if you want to run the Image with Docker Compose|
 |`haproxy_service_state`|true|system|"started"|The Condition the HAProxy should be set to|
-|`haproxy_config_logrotate`|true|system|false|Select if you want to change the Logging to rsyslogd and Configure Logortation|
+|`haproxy_config_logrotate`|true|system|false|Select if you want to change the Logging to rsyslogd and Configure Log rotation|
 |`haproxy_selinux_enabled`|true|system|false|Select if you want to configure SELinux Settings|
-|`haproxy_firewalld_enabled`|true|system|false|Select if you want to configure FirewallD Settings|
-|`haproxy_sysctl_enabled`|true|system|false|Seclect if you want to configure Kernel Parameters|
+|`haproxy_firewalld_enabled`|true|system|false|Select if you want to configure Firewalld Settings|
+|`haproxy_sysctl_enabled`|true|system|false|Select if you want to configure Kernel Parameters|
 |`haproxy_show_debug`|true|system|false|If you enable this some Debug Information is shown|
 |`haproxy_testing_mode`|true|both|false|If you enable this a fake TLS Certificate will be created and Apache will be installed|
 |`haproxy_molecule_test`|false|system|true|Only used for Molecule Tests where this is `true`|
@@ -810,7 +812,7 @@ In [Docker Mode](#docker-mode) you need to make sure you have Docker (with the d
 
 To use this Role install it from the Ansible Galaxy
 
-Eighter from Shell on your local machine:
+Either from Shell on your local machine:
 
 ```shell
 ansible-galaxy role install martin-micimo.haproxy
@@ -832,7 +834,7 @@ This will set up:
 - A Prometheus Frontend for Metrics on the default Port 8404.
 - A HTTP Frontend listening on Port 80, forwarding Traffic to the web_servers Backends.
 - Three Backends in leastconn Balancing Mode.
-- A Port Forward from 8080 to an SSH Port (22) on remote_backend in TCP Mode. Be extra carefull with something like this.
+- A Port Forward from 8080 to an SSH Port (22) on remote_backend in TCP Mode. Be extra careful with something like this.
 
 ```yaml
 ---
@@ -994,7 +996,7 @@ This will set up:
 - A running Docker Container managed by the Compose Plugin.
 - The exact same Configuration as the [Playbook System Simple](#playbook-system-simple) Example.
 - We have to overwrite the default `haproxy_validation_command`, because we can not verify the Config without a local HAProxy.
-- :warning: Be extra carefull with the exposed unsecured Prometheus Metrics Port 8404 here
+- :warning: Be extra careful with the exposed unsecured Prometheus Metrics Port 8404 here
 
 ```yaml
 ---
@@ -1047,8 +1049,8 @@ This will set up:
 
 This will set up:
 - A Docker Image with a specific Version and Registry Path to push it to.
-- The User in the Docker Image that will run the Haproxy is named `harharproxy` instead of the default `haproxy`
-- The smalest Configuration possible that HAProxy accept as valid. Totaly useless, but valid.
+- The User in the Docker Image that will run the HAProxy is named `harharproxy` instead of the default `haproxy`
+- The smallest Configuration possible that HAProxy accept as valid. Totally useless, but valid.
 - You must have a working [Docker Registry Authentification](https://docs.docker.com/reference/cli/docker/login/#examples) configured on the System for this to work.
 
 ```yaml
@@ -1197,7 +1199,7 @@ This will set up:
 ...
 ```
 
-# Tipps and Tricks
+# Tips and Tricks
 
 - Find Proper TLS Certificate Settings in the [Moz://a SSL Configuration Generator](https://ssl-config.mozilla.org/)
 - Test your TLS Configuration Strength with [Qualys SSL Labs](https://www.ssllabs.com/ssltest/)
