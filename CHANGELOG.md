@@ -15,6 +15,16 @@ and this project adheres to [Intended Effort Versioning (EffVer)](https://jacobt
 
 ### Removed
 
+## 1.0.6 - 2024-04-06
+
+### Fixed
+
+- Spelling in the README
+
+### Added
+
+- Docker Container Healthcheck
+
 ## 1.0.5 - 2024-03-11
 
 ### Fixed
