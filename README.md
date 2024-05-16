@@ -93,7 +93,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 - [x] Debian 12 Bookworm
 - [x] Debian 11 Bullseye
 - [x] Debian 10 Buster
-- [ ] Ubuntu 24.04 Noble Numbat
+- [x] Ubuntu 24.04 Noble Numbat
 - [x] Ubuntu 22.04 Jammy Jellyfish
 - [x] Ubuntu 20.04 Focal Fossa
 - [x] Ubuntu 18.04 Bionic Beaver
@@ -149,16 +149,16 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### Ubuntu
 
-|Version|End of Life|Ubuntu 22|Ubuntu 20|Ubuntu 18|
-|:--|:--|:--|:--|:--|
-|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|-|-|-|
-|[2.9](http://git.haproxy.org/?p=haproxy.git)|2025-Q1 (stable)|Supported|Supported|-|
-|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|**Role Default**|**Role Default**|-|
-|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|Supported|Supported|**Role Default** PPA unreliable|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|Supported|Supported|PPA unreliable|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|OS Default|Supported|PPA unreliable|
-|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|OS Default|Supported|
-|[1.8](http://git.haproxy.org/?p=haproxy-1.8.git)|2022-Q4 (EOL!)|-|-|OS Default|
+|Version|End of Life|Ubuntu 24|Ubuntu 22|Ubuntu 20|Ubuntu 18|
+|:--|:--|:--|:--|:--|:--|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|-|-|-|-|
+|[2.9](http://git.haproxy.org/?p=haproxy.git)|2025-Q1 (stable)|Supported|Supported|Supported|-|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|**Role Default**|**Role Default**|**Role Default**|-|
+|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|Supported|Supported|**Role Default** PPA unreliable|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|Supported|Supported|PPA unreliable|
+|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|Supported|PPA unreliable|
+|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|OS Default|Supported|
+|[1.8](http://git.haproxy.org/?p=haproxy-1.8.git)|2022-Q4 (EOL!)|-|-|-|OS Default|
 
 ### RockyLinux
 

@@ -6,5 +6,5 @@
     haproxy_show_debug: true
   tasks:
     - ansible.builtin.import_role:
-        name: haproxy
+        name: ansible-haproxy
 ...

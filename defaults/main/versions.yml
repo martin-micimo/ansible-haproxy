@@ -2,6 +2,7 @@
 haproxy_debian_bookworm_default_version: "2.8"
 haproxy_debian_bullseye_default_version: "2.8"
 haproxy_debian_buster_default_version: "2.6"
+haproxy_ubuntu_noble_default_version: "2.8"
 haproxy_ubuntu_jammy_default_version: "2.8"
 haproxy_ubuntu_focal_default_version: "2.8"
 haproxy_ubuntu_bionic_default_version: "2.6"
@@ -71,6 +72,14 @@ haproxy_versions:
         key: "https://haproxy.debian.net/bernat.debian.org.gpg"
         set_version: true
   Ubuntu:
+    noble:
+      2-8:
+        method: "apt"
+        set_version: false
+      2-9:
+        method: "ppa"
+        ppa: "ppa:vbernat/haproxy-2.9"
+        set_version: true
     jammy:
       2-2:
         method: "apt"

@@ -5,12 +5,12 @@ dependency:
 driver:
   name: docker
 platforms:
-  # https://wiki.debian.org/DebianReleases
-  - name: debian12
-    image: debian:12-slim
-    command: sleep infinity
-    groups: [Debian]
-    privileged: false
+#  # https://wiki.debian.org/DebianReleases
+#  - name: debian12
+#    image: debian:12-slim
+#    command: sleep infinity
+#    groups: [Debian]
+#    privileged: false
 #  - name: debian11
 #    image: debian:11-slim
 #    command: sleep infinity
@@ -21,7 +21,12 @@ platforms:
 #    command: sleep infinity
 #    groups: [Debian]
 #    privileged: false
-#  # https://wiki.ubuntu.com/Releases
+  # https://wiki.ubuntu.com/Releases
+  - name: ubuntu24.04
+    image: ubuntu:24.04
+    command: sleep infinity
+    groups: [Debian]
+    privileged: false
 #  - name: ubuntu22.04
 #    image: ubuntu:22.04
 #    command: sleep infinity
