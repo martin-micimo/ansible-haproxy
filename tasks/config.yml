@@ -1,4 +1,14 @@
 ---
+# Late Dirctory Setup. Mainly for docker mode.
+- name: Create Config Directories.
+  ansible.builtin.file:
+    state: directory
+    mode: "{{ item.mode | default('0755') }}"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    path: "{{ item }}"
+  loop: "{{ haproxy_config_dirs }}"
+
 - name: Find out if the haproxy_dhparams_file exists.
   ansible.builtin.stat:
     path: "{{ haproxy_dhparams_file }}"
