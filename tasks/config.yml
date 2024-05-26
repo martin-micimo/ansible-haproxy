@@ -52,7 +52,7 @@
 - name: Template haproxy.cfg.
   ansible.builtin.template:
     src: "haproxy.cfg.j2"
-    dest: "{{ haproxy_base_dir }}/{{ haproxy_config_file }}"
+    dest: "{{ haproxy_config_dir }}/{{ haproxy_config_file }}"
     mode: "0644"
     validate: "{{ haproxy_validation_command }}"
   notify:

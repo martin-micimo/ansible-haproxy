@@ -40,7 +40,7 @@ haproxy_docker_mem_reservation: "0.5g"
 haproxy_docker_mem_limit: "1g"
 haproxy_docker_service_extra_settings: []
 haproxy_docker_healthcheck:
-  - 'test: ["CMD", "haproxy", "-c", "-f" "{{ haproxy_docker_config_dir }}/haproxy.cfg"]'
+  - 'test: ["CMD", "haproxy", "-c", "-f", "{{ haproxy_docker_config_dir }}/haproxy.cfg"]'
   - 'interval: 10s'
   - 'timeout: 10s'
   - 'retries: 3'
