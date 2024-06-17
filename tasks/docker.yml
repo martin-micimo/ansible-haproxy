@@ -46,5 +46,5 @@
     chdir: "{{ haproxy_docker_dir }}"
   when:
     - haproxy_docker_compose | bool
-    - haproxy_docker_name not in haproxy_docker_compose_running.stdout
+    - haproxy_docker_container_name not in haproxy_docker_compose_running.stdout
 ...
