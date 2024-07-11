@@ -29,6 +29,7 @@
     group: "{{ haproxy_group }}"
     mode: "0644"
   loop: "{{ haproxy_error_files }}"
+  diff: "{{ haproxy_show_template_diffs }}"
   notify: "Haproxy Reload"
 
 - name: Copy LUA Files.
@@ -47,6 +48,7 @@
     dest: "{{ haproxy_maps_dir }}/{{ item | flatten | first }}.map"
     mode: "0644"
   loop: "{{ haproxy_config_maps }}"
+  diff: "{{ haproxy_show_template_diffs }}"
   notify: "Haproxy Reload"
 
 - name: Template haproxy.cfg.
@@ -55,6 +57,7 @@
     dest: "{{ haproxy_config_dir }}/{{ haproxy_config_file }}"
     mode: "0644"
     validate: "{{ haproxy_validation_command }}"
+  diff: "{{ haproxy_show_template_diffs }}"
   notify:
     - "Haproxy Reload"
     - "Haproxy Docker Reload"

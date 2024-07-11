@@ -4,6 +4,7 @@
     src: "haproxy_Dockerfile.j2"
     dest: "{{ haproxy_docker_dir }}/Dockerfile"
     mode: "0644"
+  diff: "{{ haproxy_show_template_diffs }}"
   when: haproxy_docker_build | bool
 
 - name: Template docker-compose.yml.
@@ -12,6 +13,7 @@
     dest: "{{ haproxy_docker_dir }}/docker-compose.yml"
     mode: "0644"
   notify: "Haproxy Docker Restart"
+  diff: "{{ haproxy_show_template_diffs }}"
   when: haproxy_docker_compose | bool
 
 - name: Check if the Docker Image already exists.

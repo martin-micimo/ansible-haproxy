@@ -77,6 +77,7 @@
     dest: "{{ haproxy_helper_scripts_dir }}/{{ item.name }}"
     mode: "{{ item.mode | default('0755') }}"
   loop: "{{ haproxy_helper_scripts }}"
+  diff: "{{ haproxy_show_template_diffs }}"
   when: haproxy_helper_scripts_enabled | bool
 
 - name: Install packages to speed up entropy generation.
@@ -93,6 +94,7 @@
     mode: "{{ item.mode | default('0644') }}"
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
+  diff: "{{ haproxy_show_template_diffs }}"
   loop:
     - src: "haproxy_logrotate.j2"
       dest: "/etc/logrotate.d/haproxy"

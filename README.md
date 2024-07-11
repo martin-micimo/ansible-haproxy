@@ -793,6 +793,7 @@ All LUA Files will be created in the Sub directory **lua/** of the Config Direct
 |`haproxy_firewalld_enabled`|true|system|false|Select if you want to configure Firewalld Settings|
 |`haproxy_sysctl_enabled`|true|system|false|Select if you want to configure Kernel Parameters|
 |`haproxy_show_debug`|true|system|false|If you enable this some Debug Information is shown|
+|`haproxy_show_template_diffs`|true|both|true|By default haproxy is showing the diffs of the templates|
 |`haproxy_testing_mode`|true|both|false|If you enable this a fake TLS Certificate will be created and Apache will be installed|
 |`haproxy_molecule_test`|false|system|true|Only used for Molecule Tests where this is `true`|
 
