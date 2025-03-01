@@ -1,16 +1,16 @@
 ---
-haproxy_debian_bookworm_default_version: "2.8"
-haproxy_debian_bullseye_default_version: "2.8"
-haproxy_debian_buster_default_version: "2.6"
-haproxy_ubuntu_noble_default_version: "2.8"
-haproxy_ubuntu_jammy_default_version: "2.8"
-haproxy_ubuntu_focal_default_version: "2.8"
-haproxy_ubuntu_bionic_default_version: "2.6"
+haproxy_debian_bookworm_default_version: "3.0"
+haproxy_debian_bullseye_default_version: "3.0"
+haproxy_ubuntu_noble_default_version: "3.0"
+haproxy_ubuntu_jammy_default_version: "3.0"
+haproxy_ubuntu_focal_default_version: "3.0"
 haproxy_rocky_onyx_default_version: "2.4"
 haproxy_almalinux_puma_default_version: "2.4"
 haproxy_almalinux_lynx_default_version: "2.4"
 haproxy_almalinux_kodkod_default_version: "2.4"
 haproxy_almalinux_cat_default_version: "2.4"
+haproxy_almalinux_ocelot_default_version: "2.4"
+haproxy_almalinux_serval_default_version: "2.4"
 haproxy_versions:
   Debian:
     bookworm:
@@ -23,9 +23,9 @@ haproxy_versions:
         repo: "http://haproxy.debian.net bookworm-backports-2.8 main"
         key: "https://haproxy.debian.net/bernat.debian.org.gpg"
         set_version: true
-      2-9:
+      3-0:
         method: "repo"
-        repo: "http://haproxy.debian.net bookworm-backports-2.9 main"
+        repo: "http://haproxy.debian.net bookworm-backports-3.0 main"
         key: "https://haproxy.debian.net/bernat.debian.org.gpg"
         set_version: true
     bullseye:
@@ -47,28 +47,9 @@ haproxy_versions:
         repo: "http://haproxy.debian.net bullseye-backports-2.8 main"
         key: "https://haproxy.debian.net/bernat.debian.org.gpg"
         set_version: true
-    buster:
-      1-8:
-        method: "apt"
-        set_version: false
-      2-0:
+      3-0:
         method: "repo"
-        repo: "http://haproxy.debian.net buster-backports-2.0 main"
-        key: "https://haproxy.debian.net/bernat.debian.org.gpg"
-        set_version: true
-      2-2:
-        method: "repo"
-        repo: "http://haproxy.debian.net buster-backports-2.2 main"
-        key: "https://haproxy.debian.net/bernat.debian.org.gpg"
-        set_version: true
-      2-4:
-        method: "repo"
-        repo: "http://haproxy.debian.net buster-backports-2.4 main"
-        key: "https://haproxy.debian.net/bernat.debian.org.gpg"
-        set_version: true
-      2-6:
-        method: "repo"
-        repo: "http://haproxy.debian.net buster-backports-2.6 main"
+        repo: "http://haproxy.debian.net bullseye-backports-3.0 main"
         key: "https://haproxy.debian.net/bernat.debian.org.gpg"
         set_version: true
   Ubuntu:
@@ -76,9 +57,9 @@ haproxy_versions:
       2-8:
         method: "apt"
         set_version: false
-      2-9:
+      3-0:
         method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.9"
+        ppa: "ppa:vbernat/haproxy-3.0"
         set_version: true
     jammy:
       2-2:
@@ -96,9 +77,9 @@ haproxy_versions:
         method: "ppa"
         ppa: "ppa:vbernat/haproxy-2.8"
         set_version: true
-      2-9:
+      3-0:
         method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.9"
+        ppa: "ppa:vbernat/haproxy-3.0"
         set_version: true
     focal:
       2-0:
@@ -120,29 +101,9 @@ haproxy_versions:
         method: "ppa"
         ppa: "ppa:vbernat/haproxy-2.8"
         set_version: true
-      2-9:
+      3-0:
         method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.9"
-        set_version: true
-    bionic:
-      1-8:
-        method: "apt"
-        set_version: false
-      2-0:
-        method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.0"
-        set_version: true
-      2-2:
-        method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.2"
-        set_version: true
-      2-4:
-        method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.4"
-        set_version: true
-      2-6:
-        method: "ppa"
-        ppa: "ppa:vbernat/haproxy-2.6"
+        ppa: "ppa:vbernat/haproxy-3.0"
         set_version: true
   Rocky:
     onyx:
@@ -163,6 +124,14 @@ haproxy_versions:
         method: "dnf"
         set_version: false
     cat:
+      2-4:
+        method: "dnf"
+        set_version: false
+    ocelot:
+      2-4:
+        method: "dnf"
+        set_version: false
+    serval:
       2-4:
         method: "dnf"
         set_version: false

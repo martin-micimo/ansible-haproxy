@@ -21,13 +21,6 @@
     - ansible_distribution_release == "bullseye"
     - haproxy_version is undefined
 
-- name: Set haproxy_version default for debian buster if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_debian_buster_default_version }}"
-  when:
-    - ansible_distribution_release == "buster"
-    - haproxy_version is undefined
-
 - name: Set haproxy_version default for ubuntu noble if undefined.
   ansible.builtin.set_fact:
     haproxy_version: "{{ haproxy_ubuntu_noble_default_version }}"
@@ -47,13 +40,6 @@
     haproxy_version: "{{ haproxy_ubuntu_focal_default_version }}"
   when:
     - ansible_distribution_release == "focal"
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for ubuntu bionic if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_ubuntu_bionic_default_version }}"
-  when:
-    - ansible_distribution_release == "bionic"
     - haproxy_version is undefined
 
 - name: Set haproxy_version default for rocky onyx if defined.
@@ -89,6 +75,20 @@
     haproxy_version: "{{ haproxy_almalinux_cat_default_version }}"
   when:
     - '"shamrock" in ansible_distribution_release | lower'
+    - haproxy_version is undefined
+
+- name: Set haproxy_version default for almalinux ocelot if defined.
+  ansible.builtin.set_fact:
+    haproxy_version: "{{ haproxy_almalinux_ocelot_default_version }}"
+  when:
+    - '"ocelot" in ansible_distribution_release | lower'
+    - haproxy_version is undefined
+
+- name: Set haproxy_version default for almalinux serval if defined.
+  ansible.builtin.set_fact:
+    haproxy_version: "{{ haproxy_almalinux_serval_default_version }}"
+  when:
+    - '"serval" in ansible_distribution_release | lower'
     - haproxy_version is undefined
 
 - name: Set haproxy_version_slug.

@@ -1,4 +1,3 @@
-version: "V2"
 services:
   {{ haproxy_docker_container_name }}:
     image: {{ haproxy_docker_image }}
@@ -69,4 +68,9 @@ services:
 {% for healthcheck_line in haproxy_docker_healthcheck %}
       {{ healthcheck_line }}
 {% endfor %}
+{% endif %}
+{% if haproxy_docker_network_mode is defined and haproxy_docker_network_mode | length > 0 %}
+    network_mode: "{{ haproxy_docker_network_mode }}"
+{% else %}
+    network_mode: "bridge"
 {% endif %}

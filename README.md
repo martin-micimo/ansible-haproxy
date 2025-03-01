@@ -89,15 +89,14 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 
 # Supported Distributions
 
-- [ ] Debian 13 Trixie
 - [x] Debian 12 Bookworm
 - [x] Debian 11 Bullseye
-- [x] Debian 10 Buster
 - [x] Ubuntu 24.04 Noble Numbat
 - [x] Ubuntu 22.04 Jammy Jellyfish
 - [x] Ubuntu 20.04 Focal Fossa
-- [x] Ubuntu 18.04 Bionic Beaver
 - [x] Rocky Linux 9 Blue Onyx
+- [x] Alma Linux 9.5 Teal Serval
+- [x] Alma Linux 9.4 Seafoam Ocelot
 - [x] Alma Linux 9.3 Shamrock Pampas Cat
 - [x] Alma Linux 9.2 Turquoise Kodkod
 - [x] Alma Linux 9.1 Lime Lynx
@@ -136,29 +135,27 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### Debian
 
-|Version|End of Life|Debian 12|Debian 11|Debian 10|
-|:--|:--|:--|:--|:--|
-|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|-|-|-|
-|[2.9](http://git.haproxy.org/?p=haproxy.git)|2025-Q1 (stable)|Supported|-|-|
-|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|**Role Default**|**Role Default**|-|
-|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|OS Default|Supported|**Role Default**|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|Supported|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|Supported|Supported|
-|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|Supported|
-|[1.8](http://git.haproxy.org/?p=haproxy-1.8.git)|2022-Q4 (EOL!)|-|-|OS Default|
+|Version|End of Life|Debian 12|Debian 11|
+|:--|:--|:--|:--|
+|3.2|Not released yet (LTS)|-|-|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|**Role Default**|**Role Default**|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|Supported|Supported|
+|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|OS Default|Supported|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|
+|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|Supported|
+|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|
 
 ### Ubuntu
 
-|Version|End of Life|Ubuntu 24|Ubuntu 22|Ubuntu 20|Ubuntu 18|
-|:--|:--|:--|:--|:--|:--|
-|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|-|-|-|-|
-|[2.9](http://git.haproxy.org/?p=haproxy.git)|2025-Q1 (stable)|Supported|Supported|Supported|-|
-|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|**Role Default**|**Role Default**|**Role Default**|-|
-|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|Supported|Supported|**Role Default** PPA unreliable|
+|Version|End of Life|Ubuntu 24|Ubuntu 22|Ubuntu 20|
+|:--|:--|:--|:--|:--|
+|3.2|Not released yet (LTS)|-|-|-|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|-**Role Default**|**Role Default**|**Role Default**|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|Supported|Supported|Supported|
+|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|Supported|Supported|Supported|
 |[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|Supported|Supported|PPA unreliable|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|Supported|PPA unreliable|
-|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|OS Default|Supported|
-|[1.8](http://git.haproxy.org/?p=haproxy-1.8.git)|2022-Q4 (EOL!)|-|-|-|OS Default|
+|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|Supported|
+|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|OS Default|
 
 ### RockyLinux
 
@@ -168,9 +165,9 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### AlmaLinux
 
-|Version|End of Life|9.3|9.2|9.1|9.0|
-|:--|:--|:--|:--|:--|:--|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|OS Default|OS Default|OS Default|OS Default|
+|Version|End of Life|9.4|9.5|9.3|9.2|9.1|9.0|
+|:--|:--|:--|:--|:--|:--|:--|:--|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|OS Default|OS Default|OS Default|OS Default|OS Default|OS Default|
 
 ### SELinux
 
@@ -306,7 +303,7 @@ You can Run the Image locally with the Support of the `docker-compose-plugin` li
 |`haproxy_docker_memory`|"1g"|The Containers [--memory](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
 |`haproxy_docker_service_extra_settings`|[]|A List of [services top-level variables](https://docs.docker.com/compose/compose-file/05-services/) not set in other settings above. In the Format `<setting>: <value>`|
 |`haproxy_docker_healthcheck`|['test: ["CMD", "haproxy", "-c", "-f" "{{ haproxy_docker_config_dir }}/haproxy.cfg"]', 'interval: 10s', 'timeout: 10s', 'retries: 3']|A Healthcheck for the Docker Container|
-
+|`haproxy_docker_network_mode`|"bridge"|Be default haproxy will not get its own network assigned to it. You may change that here.|
 
 You can find required CPU and memory Settings for your Setup [here](https://www.haproxy.com/documentation/haproxy-enterprise/getting-started/installation/linux/). You should always set Limitations for your Containers, because they can [impact the Host](https://docs.docker.com/config/containers/resource_constraints/).
 

@@ -1,4 +1,14 @@
 ---
+- name: "Some hack to install python and ca-certificates on debian containers."
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Find out what OS we are on"
+      ansible.builtin.raw: cat /etc/issue
+      register: molecule_os_issue
+    - name: "Install python and ca-certificates"
+      ansible.builtin.raw: "apt-get update && apt-get install -y python3 ca-certificates"
+      when: '"Kernel" not in molecule_os_issue.stdout'
 - name: Converge
   hosts: all
   vars:
