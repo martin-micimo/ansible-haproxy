@@ -2,5 +2,5 @@
 local:
   hosts:
     debian:
-      ansible_host: 192.168.178.72
+      ansible_host: 192.168.178.117
       ansible_user: ansible

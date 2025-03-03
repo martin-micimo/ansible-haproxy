@@ -165,7 +165,7 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### AlmaLinux
 
-|Version|End of Life|9.4|9.5|9.3|9.2|9.1|9.0|
+|Version|End of Life|9.5|9.4|9.3|9.2|9.1|9.0|
 |:--|:--|:--|:--|:--|:--|:--|:--|
 |[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|OS Default|OS Default|OS Default|OS Default|OS Default|OS Default|
 
@@ -257,7 +257,7 @@ This Variable sets the Version for HAProxy inside the Docker Image:
 
 |Name|Default|Description|
 |:--|:--|:--|
-|`haproxy_docker_patch_version`|2.8.6|This **must** be an exact [SemVer](https://semver.org/) Version.|
+|`haproxy_docker_patch_version`|3.0.8|This **must** be an exact [SemVer](https://semver.org/) Version.|
 |`haproxy_docker_src_download_url`|""|Provide the Exact URL to a tar.gz to overwrite the default Download URL. You still have to set `haproxy_docker_patch_version` to a SemVer Version.|
 
 By Default all Sources are Downloaded from [https://www.haproxy.org](https://www.haproxy.org/download/) and more specific from `https://www.haproxy.org/download/{{ haproxy_docker_patch_version.split('.')[0] }}.{{ haproxy_docker_patch_version.split('.')[1] }}/src/haproxy-{{ haproxy_docker_patch_version }}.tar.gz`

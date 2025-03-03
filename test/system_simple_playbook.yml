@@ -4,7 +4,7 @@
   gather_facts: true
   become: true
   roles:
-    - role: "../haproxy"
+    - role: "../ansible-haproxy"
   vars:
     haproxy_mode: "system"
     haproxy_frontend_vars:
