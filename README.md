@@ -299,8 +299,8 @@ You can Run the Image locally with the Support of the `docker-compose-plugin` li
 |`haproxy_docker_log_options`|[driver: "json-file", options: [max-size: "10m", max-file: "1"]]|We do not want Docker to fill our Drives with Logs.|
 |`haproxy_docker_extra_ports`|[]|Add a List of extra Ports in the Format `"<host_port>:<container_port>"` that are not in haproxy_frontend_vars or haproxy_listener_vars (added automatically).|
 |`haproxy_docker_cpu_count`|"1"|The Containers [cpus_count](https://docs.docker.com/compose/compose-file/05-services/#cpu_count) Setting.|
-|`haproxy_docker_memory_reservation`|"0.5g"|The Containers [--memory-reservation](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
-|`haproxy_docker_memory`|"1g"|The Containers [--memory](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
+|`haproxy_docker_mem_reservation`|"0.5g"|The Containers [--memory-reservation](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
+|`haproxy_docker_mem_limit`|"1g"|The Containers [--memory](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
 |`haproxy_docker_service_extra_settings`|[]|A List of [services top-level variables](https://docs.docker.com/compose/compose-file/05-services/) not set in other settings above. In the Format `<setting>: <value>`|
 |`haproxy_docker_healthcheck`|['test: ["CMD", "haproxy", "-c", "-f" "{{ haproxy_docker_config_dir }}/haproxy.cfg"]', 'interval: 10s', 'timeout: 10s', 'retries: 3']|A Healthcheck for the Docker Container|
 |`haproxy_docker_network_mode`|"bridge"|Be default haproxy will not get its own network assigned to it. You may change that here.|
