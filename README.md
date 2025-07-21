@@ -250,13 +250,13 @@ You may just Build and Push the created Image into a Docker Repository for use i
 
 ### Supported Versions
 
-This Role is tested for all [Versions](https://endoflife.date/haproxy) from 2.5.0 (23 Nov 2021 EOL) to 3.0.8 (25 Feb 2025). For Production use you should stick to the latest Stable Version.
+This Role is tested for all [Versions](https://endoflife.date/haproxy) from 2.5.0 (23 Nov 2021 EOL) to 3.2.3 (9 July 2025). For Production use you should stick to the latest Stable Version.
 
 This Variable sets the Version for HAProxy inside the Docker Image:
 
 |Name|Default|Description|
 |:--|:--|:--|
-|`haproxy_docker_patch_version`|3.0.8|This **must** be an exact [SemVer](https://semver.org/) Version.|
+|`haproxy_docker_patch_version`|3.2.3|This **must** be an exact [SemVer](https://semver.org/) Version.|
 |`haproxy_docker_src_download_url`|""|Provide the Exact URL to a tar.gz to overwrite the default Download URL. You still have to set `haproxy_docker_patch_version` to a SemVer Version.|
 
 By Default all Sources are Downloaded from [https://www.haproxy.org](https://www.haproxy.org/download/) and more specific from `https://www.haproxy.org/download/{{ haproxy_docker_patch_version.split('.')[0] }}.{{ haproxy_docker_patch_version.split('.')[1] }}/src/haproxy-{{ haproxy_docker_patch_version }}.tar.gz`
