@@ -22,6 +22,7 @@ services:
 {% endif %}
 {% if haproxy_frontend_vars | length > 0 or haproxy_listen_vars | length > 0 or haproxy_docker_extra_ports | length > 0 %}
     ports:
+{% if haproxy_frontend_vars | length > 0 %}
 {% for frontend in haproxy_frontend_vars %}
 {% for line in frontend.vars %}
 {% if line.startswith('bind') %}
@@ -29,6 +30,8 @@ services:
 {% endif %}
 {% endfor %}
 {% endfor %}
+{% endif %}
+{% if haproxy_listen_vars | length > 0 %}
 {% for listener in haproxy_listen_vars %}
 {% for line in listener.vars %}
 {% if line.startswith('bind') %}
@@ -36,9 +39,12 @@ services:
 {% endif %}
 {% endfor %}
 {% endfor %}
+{% endif %}
+{% if haproxy_docker_extra_ports | length > 0 %}
 {% for ports in haproxy_docker_extra_ports %}
       - "{{ ports }}"
 {% endfor %}
+{% endif %}
 {% endif %}
 {% if haproxy_docker_sysctls | length > 0 %}
     sysctls:
