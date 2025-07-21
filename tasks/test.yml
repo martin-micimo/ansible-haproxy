@@ -32,10 +32,12 @@
 
 - name: Slurp Certificates.
   ansible.builtin.slurp:
-    path: "{{ item }}"
+    path: "{{ certificate_file }}"
   loop:
     - "{{ haproxy_config_dir }}/example.pem"
     - "{{ haproxy_config_dir }}/example.key"
+  loop_control:
+    loop_var: certificate_file
   register: haproxy_test_certificates
   when: not haproxy_test_certificate.stat.exists
 

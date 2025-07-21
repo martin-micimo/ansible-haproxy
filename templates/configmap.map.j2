@@ -1,3 +1,3 @@
-{% for value in item[item | first] %}
-{{ value }} {{ item[item | first][value] }}
+{% for value in config_map[config_map | first] %}
+{{ value }} {{ config_map[config_map | first][value] }}
 {% endfor %}

@@ -8,6 +8,7 @@ haproxy_group: "haproxy"
 haproxy_log_file: "/var/log/haproxy.log"
 haproxy_debian_depentent_packages:
   - gpg # For special apt repos and PPA
+  - software-properties-common
 haproxy_base_dir: "/etc/haproxy"
 haproxy_config_dir: "{{ haproxy_base_dir }}"
 haproxy_certs_dir: "{{ haproxy_config_dir }}/certs"

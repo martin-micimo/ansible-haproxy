@@ -3,11 +3,13 @@
 - name: Create Config Directories.
   ansible.builtin.file:
     state: directory
-    mode: "{{ item.mode | default('0755') }}"
+    mode: "{{ config_dir.mode | default('0755') }}"
     owner: "{{ haproxy_user }}"
     group: "{{ haproxy_group }}"
-    path: "{{ item }}"
+    path: "{{ config_dir }}"
   loop: "{{ haproxy_config_dirs }}"
+  loop_control:
+    loop_var: config_dir
 
 - name: Find out if the haproxy_dhparams_file exists.
   ansible.builtin.stat:
@@ -24,32 +26,38 @@
 - name: Template Error Pages.
   ansible.builtin.template:
     src: "errorpage.http.j2"
-    dest: "{{ haproxy_errors_dir }}/{{ item.state }}.http"
+    dest: "{{ haproxy_errors_dir }}/{{ error_file.state }}.http"
     owner: "{{ haproxy_user }}"
     group: "{{ haproxy_group }}"
     mode: "0644"
   loop: "{{ haproxy_error_files }}"
   diff: "{{ haproxy_show_template_diffs }}"
   notify: "Haproxy Reload"
+  loop_control:
+    loop_var: error_file
 
 - name: Copy LUA Files.
   ansible.builtin.copy:
-    src: "lua/{{ item }}"
-    dest: "{{ haproxy_lua_dir }}/{{ item }}"
+    src: "lua/{{ lua_file }}"
+    dest: "{{ haproxy_lua_dir }}/{{ lua_file }}"
     owner: "{{ haproxy_user }}"
     group: "{{ haproxy_group }}"
     mode: "0644"
   loop: "{{ haproxy_lua_files }}"
   notify: "Haproxy Reload"
+  loop_control:
+    loop_var: lua_file
 
 - name: Template Configmaps.
   ansible.builtin.template:
     src: "configmap.map.j2"
-    dest: "{{ haproxy_maps_dir }}/{{ item | flatten | first }}.map"
+    dest: "{{ haproxy_maps_dir }}/{{ config_map | flatten | first }}.map"
     mode: "0644"
   loop: "{{ haproxy_config_maps }}"
   diff: "{{ haproxy_show_template_diffs }}"
   notify: "Haproxy Reload"
+  loop_control:
+    loop_var: config_map
 
 - name: Template haproxy.cfg.
   ansible.builtin.template:

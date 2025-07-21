@@ -57,8 +57,10 @@
 # Tool Installations
 - name: Install SELinux Packages.
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name: "{{ selinux_package }}"
   loop: "{{ haproxy_selinux_packages }}"
+  loop_control:
+    loop_var: selinux_package
   when:
     - ansible_os_family == "Debian"
     - haproxy_selinux_enabled
@@ -91,11 +93,13 @@
 - name: Create Config Directories.
   ansible.builtin.file:
     state: directory
-    mode: "{{ item.mode | default('0755') }}"
+    mode: "{{ config_dir.mode | default('0755') }}"
     owner: "{{ haproxy_user }}"
     group: "{{ haproxy_group }}"
-    path: "{{ item }}"
+    path: "{{ config_dir }}"
   loop: "{{ haproxy_config_dirs }}"
+  loop_control:
+    loop_var: config_dir
 
 # Debug Version Informations
 - name: Gather the package facts.

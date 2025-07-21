@@ -28,31 +28,37 @@
 
 - name: Enabling SELinux booleans for HAProxy.
   ansible.posix.seboolean:
-    name: "{{ item.name }}"
-    state: "{{ item.state | bool }}"
+    name: "{{ selinux_flag.name }}"
+    state: "{{ selinux_flag.state | bool }}"
     persistent: true
   loop: "{{ haproxy_selinux_flags }}"
   when: haproxy_selinux_enabled | bool
+  loop_control:
+    loop_var: selinux_flag
 
 - name: Firewalld set open Ports.
   ansible.posix.firewalld:
-    port: "{{ item }}"
+    port: "{{ firewalld_port }}"
     permanent: true
     state: enabled
     immediate: true
   loop: "{{ haproxy_firewalld_ports }}"
+  loop_control:
+    loop_var: firewalld_port
   when:
     - haproxy_firewalld_enabled | bool
     - haproxy_firewalld_ports | length > 0
 
 - name: Set Sysctl Settings.
   ansible.posix.sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_set: "{{ item.sysctl_set | default(false) }}"
-    reload: "{{ item.reload | default(true) }}"
-    state: "{{ item.state | default('present') }}"
+    name: "{{ sysctl_setting.name }}"
+    value: "{{ sysctl_setting.value }}"
+    sysctl_set: "{{ sysctl_setting.sysctl_set | default(false) }}"
+    reload: "{{ sysctl_setting.reload | default(true) }}"
+    state: "{{ sysctl_setting.state | default('present') }}"
   loop: "{{ haproxy_sysctl_settings }}"
+  loop_control:
+    loop_var: sysctl_setting
   when:
     - haproxy_sysctl_enabled | bool
     - haproxy_sysctl_settings | length > 0
@@ -73,10 +79,12 @@
 
 - name: Template Helper Scripts.
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ haproxy_helper_scripts_dir }}/{{ item.name }}"
-    mode: "{{ item.mode | default('0755') }}"
+    src: "{{ helper_script.src }}"
+    dest: "{{ haproxy_helper_scripts_dir }}/{{ helper_script.name }}"
+    mode: "{{ helper_script.mode | default('0755') }}"
   loop: "{{ haproxy_helper_scripts }}"
+  loop_control:
+    loop_var: helper_script
   diff: "{{ haproxy_show_template_diffs }}"
   when: haproxy_helper_scripts_enabled | bool
 
@@ -89,16 +97,18 @@
 
 - name: Template Logrotating Settings.
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.mode | default('0644') }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    src: "{{ logrotate_setting.src }}"
+    dest: "{{ logrotate_setting.dest }}"
+    mode: "{{ logrotate_setting.mode | default('0644') }}"
+    owner: "{{ logrotate_setting.owner | default('root') }}"
+    group: "{{ logrotate_setting.group | default('root') }}"
   diff: "{{ haproxy_show_template_diffs }}"
   loop:
     - src: "haproxy_logrotate.j2"
       dest: "/etc/logrotate.d/haproxy"
     - src: "haproxy_rsyslog.conf.j2"
       dest: "/etc/rsyslog.d/49-haproxy.conf"
+  loop_control:
+    loop_var: logrotate_setting
   when: haproxy_config_logrotate | bool
 ...

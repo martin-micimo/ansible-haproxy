@@ -137,24 +137,23 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 |Version|End of Life|Debian 12|Debian 11|
 |:--|:--|:--|:--|
-|3.2|Not released yet (LTS)|-|-|
-|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|**Role Default**|**Role Default**|
+|[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default**|-|
+|[3.1](http://git.haproxy.org/?p=haproxy-3.1.git)|2026-Q1|-|**Role Default**|
+|[3.0](http://git.haproxy.org/?p=haproxy-3.0.git)|2029-Q2 (LTS)|Supported|Supported|
 |[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|Supported|Supported|
 |[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|OS Default|Supported|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|Supported|
-|[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|Supported|
+|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|
 
 ### Ubuntu
 
 |Version|End of Life|Ubuntu 24|Ubuntu 22|Ubuntu 20|
 |:--|:--|:--|:--|:--|
-|3.2|Not released yet (LTS)|-|-|-|
-|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|**Role Default**|**Role Default**|**Role Default**|
+|[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default**|-|-|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|Supported|**Role Default**|**Role Default**|
 |[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|OS Default|Supported|Supported|
 |[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|Supported|Supported|Supported|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|Supported|Supported|PPA unreliable|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|Supported|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|Supported|
 |[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|OS Default|
 
 ### RockyLinux

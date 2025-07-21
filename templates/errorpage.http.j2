@@ -1,16 +1,16 @@
-HTTP/1.1 {{ item.state }} {{ item.description }}
+HTTP/1.1 {{ error_file.state }} {{ error_file.description }}
 Cache-Control: no-cache
-Connection: {{ item.method }}
+Connection: {{ error_file.method }}
 Content-Type: text/html
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>{{ item.state }} {{ item.description }}</title>
+    <title>{{ error_file.state }} {{ error_file.description }}</title>
   </head>
   <body>
-     <h1>{{ item.state }} {{ item.description }}</h1>
-     <h3>{{ item.explanation }}</h3>
+     <h1>{{ error_file.state }} {{ error_file.description }}</h1>
+     <h3>{{ error_file.explanation }}</h3>
   </body>
 </html>
