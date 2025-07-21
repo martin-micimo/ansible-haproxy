@@ -297,7 +297,7 @@ You can Run the Image locally with the Support of the `docker-compose-plugin` li
 |`haproxy_docker_restart_policy`|"always"|You should keep this at [always or unless-stopped](https://github.com/compose-spec/compose-spec/blob/master/spec.md#restart) to have the Service start after Reboot.|
 |`haproxy_docker_sysctls`|["net.ipv4.ip_unprivileged_port_start=0"]|You should keep this if you want HAProxy to serve Ports below 1024, if you add more you are on your own.|
 |`haproxy_docker_log_options`|[driver: "json-file", options: [max-size: "10m", max-file: "1"]]|We do not want Docker to fill our Drives with Logs.|
-|`haproxy_docker_extra_ports`|[]|Add a List of extra Ports in the Format `"<host_port>:<container_port>"` that are not in haproxy_frontend_vars or haproxy_listener_vars (added automatically).|
+|`haproxy_docker_extra_ports`|[]|Add a List of extra Ports in the Format `"<host_port>:<container_port>"` that are not in haproxy_frontend_vars or haproxy_listen_vars (added automatically).|
 |`haproxy_docker_cpu_count`|"1"|The Containers [cpus_count](https://docs.docker.com/compose/compose-file/05-services/#cpu_count) Setting.|
 |`haproxy_docker_mem_reservation`|"0.5g"|The Containers [--memory-reservation](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
 |`haproxy_docker_mem_limit`|"1g"|The Containers [--memory](https://docs.docker.com/config/containers/resource_constraints/#limit-a-containers-access-to-memory) Setting.|
