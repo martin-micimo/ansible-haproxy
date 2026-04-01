@@ -98,7 +98,7 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 - [x] Rocky Linux 9.7 Blue Onyx
 - [x] Rocky Linux 10.1 Red Quartz
 - [x] Alma Linux 9.7 Moss Jungle Cat
-- [x] Alma Linux 10.1 Purple Lion
+- [x] Alma Linux 10.1 Heliotrope Lion
 
 # Role Modes
 
