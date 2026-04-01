@@ -89,18 +89,16 @@ This Role lets you Setup, Configure and Maintain a [HAProxy](https://www.haproxy
 
 # Supported Distributions
 
+- [x] Debian 13 Trixie
 - [x] Debian 12 Bookworm
 - [x] Debian 11 Bullseye
 - [x] Ubuntu 24.04 Noble Numbat
 - [x] Ubuntu 22.04 Jammy Jellyfish
 - [x] Ubuntu 20.04 Focal Fossa
-- [x] Rocky Linux 9 Blue Onyx
-- [x] Alma Linux 9.5 Teal Serval
-- [x] Alma Linux 9.4 Seafoam Ocelot
-- [x] Alma Linux 9.3 Shamrock Pampas Cat
-- [x] Alma Linux 9.2 Turquoise Kodkod
-- [x] Alma Linux 9.1 Lime Lynx
-- [x] Alma Linux 9.0 Emerald Puma
+- [x] Rocky Linux 9.7 Blue Onyx
+- [x] Rocky Linux 10.1 Red Quartz
+- [x] Alma Linux 9.7 Moss Jungle Cat
+- [x] Alma Linux 10.1 Purple Lion
 
 # Role Modes
 
@@ -135,20 +133,21 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### Debian
 
-|Version|End of Life|Debian 12|Debian 11|
-|:--|:--|:--|:--|
-|[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default**|-|
-|[3.1](http://git.haproxy.org/?p=haproxy-3.1.git)|2026-Q1|-|**Role Default**|
-|[3.0](http://git.haproxy.org/?p=haproxy-3.0.git)|2029-Q2 (LTS)|Supported|Supported|
-|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|Supported|Supported|
-|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|OS Default|Supported|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|Supported|
-|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|OS Default|
+|Version|End of Life|Debian 13 Trixie|Debian 12 Bookworm|Debian 11 Bullseye|
+|:--|:--|:--|:--|:--|
+|[3.3](http://git.haproxy.org/?p=haproxy-3.3.git)|2027-Q1|Supported|-|-|
+|[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default** OS Default|**Role Default**|-|
+|[3.1](http://git.haproxy.org/?p=haproxy-3.1.git)|2026-Q1|-|-|**Role Default**|
+|[3.0](http://git.haproxy.org/?p=haproxy-3.0.git)|2029-Q2 (LTS)|Supported|Supported|Supported|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|-|Supported|Supported|
+|[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|OS Default|Supported|
+|[2.2](http://git.haproxy.org/?p=haproxy-2.2.git)|2025-Q2 (critical fixes only)|-|-|OS Default|
 
 ### Ubuntu
 
-|Version|End of Life|Ubuntu 24|Ubuntu 22|Ubuntu 20|
+|Version|End of Life|Ubuntu 24 Noble|Ubuntu 22 Jammy|Ubuntu 20 Focal|
 |:--|:--|:--|:--|:--|
+|[3.3](http://git.haproxy.org/?p=haproxy-3.3.git)|2027-Q1|Supported|-|-|
 |[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default**|-|-|
 |[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|Supported|**Role Default**|**Role Default**|
 |[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|OS Default|Supported|Supported|
@@ -158,15 +157,17 @@ If you want to modify the default Versions for multiple Distributions, you can d
 
 ### RockyLinux
 
-|Version|End of Life|9|
-|:--|:--|:--|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|OS Default|
+|Version|End of Life|10.1 Red Quartz|9.7 Blue Onyx|
+|:--|:--|:--|:--|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|OS Default|-|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2026-Q2 (LTS)|-|OS Default|
 
 ### AlmaLinux
 
-|Version|End of Life|9.5|9.4|9.3|9.2|9.1|9.0|
-|:--|:--|:--|:--|:--|:--|:--|:--|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|OS Default|OS Default|OS Default|OS Default|OS Default|OS Default|
+|Version|End of Life|10.1 Heliotrope Lion|9.7 Moss Jungle Cat|
+|:--|:--|:--|:--|
+|[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|OS Default|-|
+|[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2026-Q2 (LTS)|-|OS Default|
 
 ### SELinux
 

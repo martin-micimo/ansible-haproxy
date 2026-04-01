@@ -5,6 +5,11 @@ dependency:
     requirements-file: requirements.yml
 platforms:
   # https://wiki.debian.org/DebianReleases
+  - name: debian13
+    image: debian:13-slim
+    command: sleep infinity
+    groups: [Debian]
+    privileged: false
   - name: debian12
     image: debian:12-slim
     command: sleep infinity
@@ -16,6 +21,11 @@ platforms:
     groups: [Debian]
     privileged: false
   # https://wiki.ubuntu.com/Releases
+  # - name: ubuntu26.04
+  #   image: ubuntu:24.04
+  #   command: sleep infinity
+  #   groups: [Debian]
+  #   privileged: false
   - name: ubuntu24.04
     image: ubuntu:24.04
     command: sleep infinity
@@ -31,40 +41,25 @@ platforms:
     command: sleep infinity
     groups: [Debian]
     privileged: false
-  # Rocky releases
-  - name: rockylinux9
-    image: rockylinux:9
+  # https://wiki.rockylinux.org/rocky/version/?h=releases#current-supported-releases
+  - name: rockylinux10.1
+    image: rockylinux/rockylinux:10.1
     command: sleep infinity
     groups: [RedHat]
     privileged: false
-  # Alma releases
-  - name: almalinux95
-    image: almalinux:9.5
+  - name: rockylinux9.7
+    image: rockylinux/rockylinux:9.7
     command: sleep infinity
     groups: [RedHat]
     privileged: false
-  - name: almalinux94
-    image: almalinux:9.4
+  # https://wiki.almalinux.org/release-notes/
+  - name: almalinux10.1
+    image: almalinux:10.1
     command: sleep infinity
     groups: [RedHat]
-    privileged: false
-  - name: almalinux93
-    image: almalinux:9.3
-    command: sleep infinity
-    groups: [RedHat]
-    privileged: false
-  - name: almalinux92
-    image: almalinux:9.2
-    command: sleep infinity
-    groups: [RedHat]
-    privileged: false
-  - name: almalinux91
-    image: almalinux:9.1
-    command: sleep infinity
-    groups: [RedHat]
-    privileged: false
-  - name: almalinux90
-    image: almalinux:9.0
+    privileges: false
+  - name: almalinux9.7
+    image: almalinux:9.7
     command: sleep infinity
     groups: [RedHat]
     privileged: false

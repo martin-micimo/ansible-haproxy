@@ -4,21 +4,27 @@
   ansible.builtin.apt:
     name: "{{ haproxy_debian_depentent_packages }}"
     update_cache: true
-  when: ansible_os_family == "Debian"
+  when:
+    - ansible_os_family == "Debian"
 
-- name: Install Repository GPG Key if needed.
-  ansible.builtin.apt_key:
+- name: Download Repository GPG Key
+  ansible.builtin.get_url:
     url: "{{ haproxy_installer.key }}"
-    state: present
+    dest: /usr/share/keyrings/haproxy-archive-keyring.gpg
+    mode: '0644'
   when:
     - ansible_os_family == "Debian"
     - haproxy_installer.method == "repo"
 
-- name: Install Apt Repository.
-  ansible.builtin.apt_repository:
-    repo: "deb {{ haproxy_installer.repo }}"
+- name: Add HAProxy Apt Repository (Deb822 format)
+  ansible.builtin.deb822_repository:
+    name: haproxy
+    types: [deb]
+    uris: ["{{ haproxy_installer.repo }}"]
+    suites: ["{{ haproxy_installer.suite }}"]
+    components: [main]
+    signed_by: /usr/share/keyrings/haproxy-archive-keyring.gpg
     state: present
-    filename: haproxy
   when:
     - ansible_os_family == "Debian"
     - haproxy_installer.method == "repo"
