@@ -152,7 +152,7 @@ If you want to modify the default Versions for multiple Distributions, you can d
 |[3.0](http://git.haproxy.org/?p=haproxy.git)|2029-Q2 (LTS)|Supported|**Role Default**|**Role Default**|
 |[2.8](http://git.haproxy.org/?p=haproxy-2.8.git)|2028-Q2 (LTS)|OS Default|Supported|Supported|
 |[2.6](http://git.haproxy.org/?p=haproxy-2.6.git)|2027-Q2 (LTS)|-|Supported|Supported|Supported|
-|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|Supported|
+|[2.4](http://git.haproxy.org/?p=haproxy-2.4.git)|2026-Q2 (LTS)|-|OS Default|-|
 |[2.0](http://git.haproxy.org/?p=haproxy-2.0.git)|2024-Q2 (critical fixes only)|-|-|OS Default|
 
 ### RockyLinux
