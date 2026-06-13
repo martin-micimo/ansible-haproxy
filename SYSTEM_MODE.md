@@ -31,7 +31,7 @@ If you want to modify the default Versions for multiple Distributions, you can d
 ### Ubuntu
 
 |Version|End of Life|Ubuntu 26 Resolute|Ubuntu 24 Noble|Ubuntu 22 Jammy|Ubuntu 20 Focal|
-|:--|:--|:--|:--|:--|
+|:--|:--|:--|:--|:--|:--|
 |[3.3](http://git.haproxy.org/?p=haproxy-3.3.git)|2027-Q1|Supported|Supported|-|-|
 |[3.2](http://git.haproxy.org/?p=haproxy-3.2.git)|2030-Q1 (LTS)|**Role Default**|**Role Default**|-|-|
 |[3.0](http://git.haproxy.org/?p=haproxy-3.0.git)|2029-Q2 (LTS)|-|Supported|**Role Default**|**Role Default**|
