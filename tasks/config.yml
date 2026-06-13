@@ -1,6 +1,6 @@
 ---
-# Late Dirctory Setup. Mainly for docker mode.
-- name: Create Config Directories.
+# Late directory Setup. Mainly for docker mode.
+- name: "Create Config Directories."
   ansible.builtin.file:
     state: directory
     mode: "{{ config_dir.mode | default('0755') }}"
@@ -11,19 +11,19 @@
   loop_control:
     loop_var: config_dir
 
-- name: Find out if the haproxy_dhparams_file exists.
+- name: "Find out if the haproxy_dhparams_file exists."
   ansible.builtin.stat:
     path: "{{ haproxy_dhparams_file }}"
   register: haproxy_dhaparams_file_stat
   when: haproxy_dhparams_create | bool
 
-- name: Create dhparams File.
+- name: "Create dhparams File."
   ansible.builtin.command: "openssl dhparam -out {{ haproxy_dhparams_file }} {{ haproxy_dhparams_bits }}"
   when:
     - haproxy_dhparams_create | bool
     - not haproxy_dhaparams_file_stat.stat.exists
 
-- name: Template Error Pages.
+- name: "Template Error Pages."
   ansible.builtin.template:
     src: "errorpage.http.j2"
     dest: "{{ haproxy_errors_dir }}/{{ error_file.state }}.http"
@@ -36,7 +36,7 @@
   loop_control:
     loop_var: error_file
 
-- name: Copy LUA Files.
+- name: "Copy LUA Files."
   ansible.builtin.copy:
     src: "lua/{{ lua_file }}"
     dest: "{{ haproxy_lua_dir }}/{{ lua_file }}"
@@ -48,18 +48,18 @@
   loop_control:
     loop_var: lua_file
 
-- name: Template Configmaps.
+- name: "Template Configmaps."
   ansible.builtin.template:
     src: "configmap.map.j2"
-    dest: "{{ haproxy_maps_dir }}/{{ config_map | flatten | first }}.map"
+    dest: "{{ haproxy_maps_dir }}/{{ haproxy_config_map | flatten | first }}.map"
     mode: "0644"
   loop: "{{ haproxy_config_maps }}"
   diff: "{{ haproxy_show_template_diffs }}"
   notify: "Haproxy Reload"
   loop_control:
-    loop_var: config_map
+    loop_var: haproxy_config_map
 
-- name: Template haproxy.cfg.
+- name: "Template haproxy.cfg."
   ansible.builtin.template:
     src: "haproxy.cfg.j2"
     dest: "{{ haproxy_config_dir }}/{{ haproxy_config_file }}"

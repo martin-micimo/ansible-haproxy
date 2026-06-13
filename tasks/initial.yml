@@ -1,5 +1,5 @@
 ---
-- name: Overwrite Variables for Docker Mode.
+- name: "Overwrite Variables for Docker Mode."
   ansible.builtin.set_fact:
     haproxy_user: "root"
     haproxy_group: "root"

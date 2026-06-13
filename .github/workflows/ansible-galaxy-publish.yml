@@ -1,5 +1,5 @@
 ---
-name: Anible Galaxy Publish
+name: Ansible Galaxy Publish
 on:
   push:
     tags:

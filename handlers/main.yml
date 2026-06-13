@@ -21,8 +21,27 @@
     - haproxy_mode == "docker"
     - haproxy_docker_compose | bool
 
-- name: Apache Restart
-  ansible.builtin.systemd:
+- name: "MOLECULE - Restart Apache (RedHat family)"
+  ansible.builtin.command: "httpd -k restart"
+  when:
+    - haproxy_molecule_test | bool
+    - ansible_os_family == "RedHat"
+  listen: "Apache Restart"
+
+- name: "MOLECULE - Restart Apache (Debian family)"
+  ansible.builtin.service:
     name: apache2
     state: restarted
+  when:
+    - haproxy_molecule_test | bool
+    - ansible_os_family == "Debian"
+  listen: "Apache Restart"
+
+- name: "Restart Apache service."
+  ansible.builtin.service:
+    name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+    state: restarted
+  when:
+    - not haproxy_molecule_test | bool
+  listen: "Apache Restart"
 ...

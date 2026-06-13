@@ -1,123 +1,58 @@
 ---
-- name: Output OS Environment.
+- name: "Output OS Environment."
   ansible.builtin.debug:
     msg:
-      - "ansible_distribution:         {{ ansible_distribution }}"
-      - "ansible_distribution_release: {{ ansible_distribution_release }}"
-      - "ansible_os_family:            {{ ansible_os_family }}"
-  when: haproxy_show_debug
+      - "ansible_distribution:               {{ ansible_distribution }}"
+      - "ansible_distribution_release:       {{ ansible_distribution_release }}"
+      - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+      - "ansible_os_family:                  {{ ansible_os_family }}"
+  when: haproxy_show_debug | bool
 
-- name: Set haproxy_version default for debian bookworm if undefined.
+- name: "Set haproxy_version from default haproxy_version_defaults."
   ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_debian_bookworm_default_version }}"
-  when:
-    - ansible_distribution_release == "bookworm"
-    - haproxy_version is undefined
+    haproxy_version: "{{ haproxy_version_defaults[ansible_distribution | lower][(ansible_distribution_release or ansible_distribution_major_version) | lower | split | last] | default('unknown') }}"
+  when: haproxy_version is undefined
 
-- name: Set haproxy_version default for debian bullseye if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_debian_bullseye_default_version }}"
+- name: "Fail if haproxy_version is not known."
+  ansible.builtin.fail:
+    msg: "Was not able to determine the HAProxy version from defaults. Please set the variable haproxy_version yourself."
   when:
-    - ansible_distribution_release == "bullseye"
-    - haproxy_version is undefined
+    - haproxy_version == "unknown"
 
-- name: Set haproxy_version default for debian trixie if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_debian_trixie_default_version }}"
-  when:
-    - ansible_distribution_release == "trixie"
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for ubuntu noble if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_ubuntu_noble_default_version }}"
-  when:
-    - ansible_distribution_release == "noble"
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for ubuntu jammy if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_ubuntu_jammy_default_version }}"
-  when:
-    - ansible_distribution_release == "jammy"
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for ubuntu focal if undefined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_ubuntu_focal_default_version }}"
-  when:
-    - ansible_distribution_release == "focal"
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for rocky obsidian if defined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_rocky_obsidian_default_version }}"
-  when:
-    - '"obsidian" in ansible_distribution_release | lower'
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for rocky onyx if defined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_rocky_onyx_default_version }}"
-  when:
-    - '"onyx" in ansible_distribution_release | lower'
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for rocky quartz if defined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_rocky_quartz_default_version }}"
-  when:
-    - '"quartz" in ansible_distribution_release | lower'
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for almalinux cat if defined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_almalinux_cat_default_version }}"
-  when:
-    - '"cat" in ansible_distribution_release | lower'
-    - haproxy_version is undefined
-
-- name: Set haproxy_version default for almalinux lion if defined.
-  ansible.builtin.set_fact:
-    haproxy_version: "{{ haproxy_almalinux_lion_default_version }}"
-  when:
-    - '"lion" in ansible_distribution_release | lower'
-    - haproxy_version is undefined
-
-- name: Set haproxy_version_slug.
+- name: "Set haproxy_version_slug."
   ansible.builtin.set_fact:
     haproxy_version_slug: "{{ haproxy_version | regex_replace('\\.', '-') }}"
 
-- name: Set shortname for more complicated Release Names.
+- name: "Set short name for more complicated Release Names."
   ansible.builtin.set_fact:
     ansible_distribution_release_shortname: "{{ ansible_distribution_release | lower | split(' ') | last }}"
   when: haproxy_installer is undefined
 
-- name: Show HAProxy versions.
+- name: "Show HAProxy versions."
   ansible.builtin.debug:
     msg:
       - "haproxy_version:      {{ haproxy_version }}"
       - "haproxy_version_slug: {{ haproxy_version_slug }}"
-  when: haproxy_show_debug
+  when: haproxy_show_debug | bool
 
-- name: Set haproxy_installer.
+- name: "Set haproxy_installer."
   ansible.builtin.set_fact:
-    haproxy_installer: "{{ haproxy_versions[ansible_distribution][ansible_distribution_release][haproxy_version_slug] }}"
-  when: haproxy_versions[ansible_distribution][ansible_distribution_release][haproxy_version_slug] is defined
+    haproxy_installer: "{{ haproxy_versions[ansible_distribution][ansible_distribution_release or ansible_distribution_major_version][haproxy_version_slug] }}"
+  when: haproxy_versions[ansible_distribution][ansible_distribution_release or ansible_distribution_major_version][haproxy_version_slug] is defined
 
-- name: Set shortname for more complicated Release Names.
+- name: "Set shortname for more complicated Release Names."
   ansible.builtin.set_fact:
     ansible_distribution_release_shortname: "{{ ansible_distribution_release | lower | split(' ') | last }}"
   when: haproxy_installer is undefined
 
-- name: Set haproxy_installer for more complicated Release Names.
+- name: "Set haproxy_installer for more complicated Release Names."
   ansible.builtin.set_fact:
     haproxy_installer: "{{ haproxy_versions[ansible_distribution][ansible_distribution_release_shortname][haproxy_version_slug] }}"
   when:
     - haproxy_installer is undefined
     - haproxy_versions[ansible_distribution][ansible_distribution_release_shortname][haproxy_version_slug] is defined
 
-- name: Fail if haproxy_version is unsupported.
+- name: "Fail if haproxy_version is unsupported."
   ansible.builtin.fail:
     msg: "haproxy_version {{ haproxy_version }} is unsupported for {{ ansible_distribution_release }}"
   when: haproxy_installer is undefined

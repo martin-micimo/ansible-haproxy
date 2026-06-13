@@ -1,10 +1,16 @@
 ---
 parseable: true
-skip_list:
-  - no-changed-when
-  - role-name[path]
+skip_list: []
+warn_list:
+  - role-name
+  - meta-no-info
   - yaml[line-length]
+  - no-changed-when
+  - schema[meta]
 use_default_rules: true
 verbosity: 1
 exclude_paths:
   - molecule/
+  - .github/
+  - test/
+  - meta/

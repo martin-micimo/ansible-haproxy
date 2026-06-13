@@ -1,19 +1,27 @@
 ---
-- name: "Some hack to install python and ca-certificates on debian containers."
+- name: "Some hack to install python and ca-certificates on debian and fedora containers."
   hosts: all
   gather_facts: false
   tasks:
-    - name: "Find out what OS we are on"
+    - name: "Find out what OS we are on."
       ansible.builtin.raw: cat /etc/issue
       register: molecule_os_issue
-    - name: "Install python and ca-certificates"
+    - name: "Find out what release we are on."
+      ansible.builtin.raw: cat /etc/os-release
+      register: molecule_os_release
+    - name: "Install python and ca-certificates for debian"
       ansible.builtin.raw: "apt-get update && apt-get install -y python3 ca-certificates"
       when: '"Kernel" not in molecule_os_issue.stdout'
+    - name: "Install python3, ca-certificates, python3-libdnf5 and python3-rpm for fedora"
+      ansible.builtin.raw: "dnf install -y python3 ca-certificates python3-libdnf5 python3-rpm"
+      when: '"Fedora" in molecule_os_release.stdout'
 - name: Converge
   hosts: all
   vars:
     haproxy_molecule_test: true
+    haproxy_testing_mode: true
     haproxy_show_debug: true
+    haproxy_helper_scripts_enabled: true
   tasks:
     - ansible.builtin.import_role:
         name: ansible-haproxy

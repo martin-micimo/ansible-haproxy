@@ -1,24 +1,20 @@
 ---
-- name: Include Distribution variables.
+- name: "Include Distribution variables."
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
   when: haproxy_mode == "system"
 
-- name: Include Initial Tasks.
+- name: "Include Initial Tasks."
   ansible.builtin.include_tasks: "initial.yml"
 
-- name: Include Preparation Tasks.
+- name: "Include Preparation Tasks."
   ansible.builtin.include_tasks: "prepare.yml"
   when: haproxy_mode == "system"
 
-- name: Include Installation Tasks.
+- name: "Include Installation Tasks."
   ansible.builtin.include_tasks: "install.yml"
   when: haproxy_mode == "system"
 
-- name: Include Test Tasks.
-  ansible.builtin.include_tasks: "test.yml"
-  when: haproxy_testing_mode | bool
-
-- name: Include System Tweaking Tasks.
+- name: "Include System Tweaking Tasks."
   ansible.builtin.include_tasks: "system.yml"
   when: >
     haproxy_mode == "system" and
@@ -29,16 +25,20 @@
     haproxy_dhparams_create | bool or
     haproxy_config_logrotate | bool
 
-- name: Include Configuration Tasks.
+- name: "Include Configuration Tasks."
   ansible.builtin.include_tasks: "config.yml"
 
-- name: Include Docker Tasks.
+- name: "Include Docker Tasks."
   ansible.builtin.include_tasks: "docker.yml"
   when: haproxy_mode == "docker"
 
-- name: Include Service Tasks.
+- name: "Include Service Tasks."
   ansible.builtin.include_tasks: "service.yml"
 
-- name: Flush Handlers.
+- name: "Include Test Tasks."
+  ansible.builtin.include_tasks: "test.yml"
+  when: haproxy_testing_mode | bool
+
+- name: "Flush Handlers."
   ansible.builtin.meta: "flush_handlers"
 ...

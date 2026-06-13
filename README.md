@@ -72,6 +72,7 @@ Separate Markdown files:
 - [x] Debian 13 Trixie
 - [x] Debian 12 Bookworm
 - [x] Debian 11 Bullseye
+- [x] Ubuntu 26.04 Resolute Raccoon
 - [x] Ubuntu 24.04 Noble Numbat
 - [x] Ubuntu 22.04 Jammy Jellyfish
 - [x] Ubuntu 20.04 Focal Fossa
@@ -79,6 +80,8 @@ Separate Markdown files:
 - [x] Rocky Linux 10.1 Red Quartz
 - [x] Alma Linux 9.7 Moss Jungle Cat
 - [x] Alma Linux 10.1 Heliotrope Lion
+- [x] Fedora 44
+- [x] Fedora 43
 
 # Role Modes
 

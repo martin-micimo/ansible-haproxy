@@ -21,11 +21,11 @@ platforms:
     groups: [Debian]
     privileged: false
   # https://wiki.ubuntu.com/Releases
-  # - name: ubuntu26.04
-  #   image: ubuntu:24.04
-  #   command: sleep infinity
-  #   groups: [Debian]
-  #   privileged: false
+  - name: ubuntu26.04
+    image: ubuntu:26.04
+    command: sleep infinity
+    groups: [Debian]
+    privileged: false
   - name: ubuntu24.04
     image: ubuntu:24.04
     command: sleep infinity
@@ -60,6 +60,17 @@ platforms:
     privileges: false
   - name: almalinux9.7
     image: almalinux:9.7
+    command: sleep infinity
+    groups: [RedHat]
+    privileged: false
+  # https://docs.fedoraproject.org/en-US/releases/
+  - name: fedora43
+    image: buluma/fedora:43
+    command: sleep infinity
+    groups: [RedHat]
+    privileged: false
+  - name: fedora44
+    image: buluma/fedora:44
     command: sleep infinity
     groups: [RedHat]
     privileged: false

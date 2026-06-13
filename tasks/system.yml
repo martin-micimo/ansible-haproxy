@@ -1,24 +1,31 @@
 ---
-- name: Check for SELinux Config File.
+- name: "Check for SELinux Config File."
   ansible.builtin.stat:
     path: "/etc/selinux/config"
   register: haproxy_selinux_config_file_stat
   when: haproxy_selinux_enabled | bool
 
-- name: Enable SELinux.
+- name: "Enable SELinux."
   ansible.builtin.command: "selinux-activate"
   register: haproxy_selinux_activated
   when:
     - haproxy_selinux_enabled | bool
     - not haproxy_selinux_config_file_stat.stat.exists
 
-- name: Restart the System if needed.
+- name: "Restart the System if needed."
   ansible.builtin.reboot:
   when:
     - haproxy_selinux_enabled | bool
     - haproxy_selinux_activated.changed
 
-- name: Allowing HAProxy to listen on some TCP ports.
+- name: "Wait for system to become available after reboot."
+  ansible.builtin.wait_for_connection:
+    connect_timeout: 20
+    sleep: 5
+    delay: 10
+    timeout: 300
+
+- name: "Allowing HAProxy to listen on some TCP ports."
   community.general.seport:
     ports: "{{ haproxy_selinux_ports }}"
     proto: tcp
@@ -26,7 +33,7 @@
     state: present
   when: haproxy_selinux_enabled | bool
 
-- name: Enabling SELinux booleans for HAProxy.
+- name: "Enabling SELinux booleans for HAProxy."
   ansible.posix.seboolean:
     name: "{{ selinux_flag.name }}"
     state: "{{ selinux_flag.state | bool }}"
@@ -36,7 +43,7 @@
   loop_control:
     loop_var: selinux_flag
 
-- name: Firewalld set open Ports.
+- name: "Firewalld set open Ports."
   ansible.posix.firewalld:
     port: "{{ firewalld_port }}"
     permanent: true
@@ -49,7 +56,7 @@
     - haproxy_firewalld_enabled | bool
     - haproxy_firewalld_ports | length > 0
 
-- name: Set Sysctl Settings.
+- name: "Set Sysctl Settings."
   ansible.posix.sysctl:
     name: "{{ sysctl_setting.name }}"
     value: "{{ sysctl_setting.value }}"
@@ -63,7 +70,7 @@
     - haproxy_sysctl_enabled | bool
     - haproxy_sysctl_settings | length > 0
 
-- name: Setup Scripts Directory.
+- name: "Setup Scripts Directory."
   ansible.builtin.file:
     path: "{{ haproxy_helper_scripts_dir }}"
     state: directory
@@ -72,12 +79,12 @@
     group: "{{ haproxy_group }}"
   when: haproxy_helper_scripts_enabled | bool
 
-- name: Install Helper Script Packages.
+- name: "Install Helper Script Packages."
   ansible.builtin.package:
     name: "{{ haproxy_helper_scripts_packages }}"
   when: haproxy_helper_scripts_enabled | bool
 
-- name: Template Helper Scripts.
+- name: "Template Helper Scripts."
   ansible.builtin.template:
     src: "{{ helper_script.src }}"
     dest: "{{ haproxy_helper_scripts_dir }}/{{ helper_script.name }}"
@@ -88,20 +95,20 @@
   diff: "{{ haproxy_show_template_diffs }}"
   when: haproxy_helper_scripts_enabled | bool
 
-- name: Install packages to speed up entropy generation.
+- name: "Install packages to speed up entropy generation."
   ansible.builtin.package:
     name: "{{ haproxy_dhparams_packages }}"
   when:
     - haproxy_dhparams_create | bool
     - haproxy_dhparams_speedup | bool
 
-- name: Template Logrotating Settings.
+- name: "Template logrotating Settings."
   ansible.builtin.template:
-    src: "{{ logrotate_setting.src }}"
-    dest: "{{ logrotate_setting.dest }}"
-    mode: "{{ logrotate_setting.mode | default('0644') }}"
-    owner: "{{ logrotate_setting.owner | default('root') }}"
-    group: "{{ logrotate_setting.group | default('root') }}"
+    src: "{{ haproxy_logrotate_setting.src }}"
+    dest: "{{ haproxy_logrotate_setting.dest }}"
+    mode: "{{ haproxy_logrotate_setting.mode | default('0644') }}"
+    owner: "{{ haproxy_logrotate_setting.owner | default('root') }}"
+    group: "{{ haproxy_logrotate_setting.group | default('root') }}"
   diff: "{{ haproxy_show_template_diffs }}"
   loop:
     - src: "haproxy_logrotate.j2"
@@ -109,6 +116,6 @@
     - src: "haproxy_rsyslog.conf.j2"
       dest: "/etc/rsyslog.d/49-haproxy.conf"
   loop_control:
-    loop_var: logrotate_setting
+    loop_var: haproxy_logrotate_setting
   when: haproxy_config_logrotate | bool
 ...

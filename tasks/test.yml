@@ -1,18 +1,22 @@
 ---
 # Fake Self signed Certificate for TLS Testing
-- name: Check if there is a fake self signed Certificate.
+- name: "Check if there is a fake self signed Certificate."
   ansible.builtin.stat:
     path: "{{ haproxy_certs_dir }}/example.pem"
   register: haproxy_test_certificate
 
-- name: Create private key (RSA, 2048 bits).
+- name: "Install testing packages."
+  ansible.builtin.package:
+    name: "{{ haproxy_testing_packages }}"
+
+- name: "Create private key (RSA, 2048 bits)."
   community.crypto.openssl_privatekey:
     path: "{{ haproxy_config_dir }}/example.key"
     size: "2048"
     type: "RSA"
   when: not haproxy_test_certificate.stat.exists
 
-- name: Generate an OpenSSL Certificate Signing Request.
+- name: "Generate an OpenSSL Certificate Signing Request."
   community.crypto.openssl_csr:
     path: "{{ haproxy_config_dir }}/example.csr"
     privatekey_path: "{{ haproxy_config_dir }}/example.key"
@@ -22,7 +26,7 @@
     common_name: "example.com"
   when: not haproxy_test_certificate.stat.exists
 
-- name: Create simple self-signed certificate.
+- name: "Create simple self-signed certificate."
   community.crypto.x509_certificate:
     path: "{{ haproxy_config_dir }}/example.pem"
     privatekey_path: "{{ haproxy_config_dir }}/example.key"
@@ -30,25 +34,25 @@
     provider: selfsigned
   when: not haproxy_test_certificate.stat.exists
 
-- name: Slurp Certificates.
+- name: "Slurp Certificates."
   ansible.builtin.slurp:
-    path: "{{ certificate_file }}"
+    path: "{{ haproxy_test_certificate_file }}"
   loop:
     - "{{ haproxy_config_dir }}/example.pem"
     - "{{ haproxy_config_dir }}/example.key"
   loop_control:
-    loop_var: certificate_file
+    loop_var: haproxy_test_certificate_file
   register: haproxy_test_certificates
   when: not haproxy_test_certificate.stat.exists
 
-- name: Put Certificates into combined format.
+- name: "Put Certificates into combined format."
   ansible.builtin.copy:
     content: "{{ haproxy_test_certificates.results[0].content | b64decode }}{{ haproxy_test_certificates.results[1].content | b64decode }}"
     dest: "{{ haproxy_certs_dir }}/example.pem"
     mode: "0644"
   when: not haproxy_test_certificate.stat.exists
 
-- name: Remove Certificate components.
+- name: "Remove Certificate components."
   ansible.builtin.file:
     state: absent
     path: "{{ item }}"
@@ -58,19 +62,35 @@
     - "{{ haproxy_config_dir }}/example.csr"
 
 # Fake Servers for Backend testing
-- name: Install Apache.
+- name: "Install Apache."
   ansible.builtin.package:
-    name: apache2
+    name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
 
-- name: Set up Apache example Ports.
+- name: "Set up Apache example Ports (Debian family)."
   ansible.builtin.copy:
     dest: "/etc/apache2/ports.conf"
     content: |
       Listen 8080
       Listen 8443
     mode: "0644"
+  when: ansible_os_family == "Debian"
   notify: "Apache Restart"
 
-- name: Flush Handlers.
+- name: "Set up Apache example Ports (RedHat family)."
+  ansible.builtin.blockinfile:
+    path: "/etc/httpd/conf/httpd.conf"
+    insertafter: '^#Listen '
+    block: |
+      Listen 8080
+      Listen 8443
+    mode: "0644"
+  when: ansible_os_family == "RedHat"
+  notify: "Apache Restart"
+
+- name: "Flush Handlers."
   ansible.builtin.meta: "flush_handlers"
+
+- name: "MOLECULE - Pause for Molecule Inspection."
+  ansible.builtin.pause:
+  when: haproxy_molecule_test | bool
 ...

@@ -1,13 +1,13 @@
 ---
 # Debian Family Installation
-- name: Install depentent packages for Debian Distribution family.
+- name: "Install dependent packages for Debian Distribution family."
   ansible.builtin.apt:
-    name: "{{ haproxy_debian_depentent_packages }}"
+    name: "{{ haproxy_debian_dependent_packages }}"
     update_cache: true
   when:
     - ansible_os_family == "Debian"
 
-- name: Download Repository GPG Key
+- name: "Download Repository GPG Key."
   ansible.builtin.get_url:
     url: "{{ haproxy_installer.key }}"
     dest: /usr/share/keyrings/haproxy-archive-keyring.gpg
@@ -16,7 +16,7 @@
     - ansible_os_family == "Debian"
     - haproxy_installer.method == "repo"
 
-- name: Add HAProxy Apt Repository (Deb822 format)
+- name: "Add HAProxy Apt Repository (Deb822 format)."
   ansible.builtin.deb822_repository:
     name: haproxy
     types: [deb]
@@ -29,39 +29,42 @@
     - ansible_os_family == "Debian"
     - haproxy_installer.method == "repo"
 
-- name: Install PPA Repository.
-  ansible.builtin.apt_repository:
-    repo: "{{ haproxy_installer.ppa }}"
-    state: present
+- name: "Install PPA Repository (Deb822 format)."
+  ansible.builtin.deb822_repository:
+    name: "{{ haproxy_installer.ppa | replace('/', '-') }}"
+    uris: "https://ppa.launchpadcontent.net/{{ haproxy_installer.ppa }}/ubuntu"
+    suites: "{{ ansible_distribution_release | lower }}"
+    components: "main"
+    signed_by: "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x{{ haproxy_installer.id }}"
   when:
     - ansible_os_family == "Debian"
     - haproxy_installer.method == "ppa"
 
-- name: Update APT again for Debian Distribution family.
+- name: "Update APT again for Debian Distribution family."
   ansible.builtin.apt:
     update_cache: true
   when: ansible_os_family == "Debian"
 
-- name: Install Haproxy for Debian Distribution family.
+- name: "Install Haproxy for Debian Distribution family in specific version."
   ansible.builtin.apt:
     name: "{{ haproxy_package_name }}={{ haproxy_version }}.*"
     state: "{{ haproxy_package_state }}"
     allow_downgrade: true
   when:
     - ansible_os_family == "Debian"
-    - haproxy_installer.set_version
+    - haproxy_installer.set_version | bool
 
-- name: Install Haproxy for Debian Disttribution family without specific Version.
+- name: "Install Haproxy for Debian distribution family without specific Version."
   ansible.builtin.apt:
     name: "{{ haproxy_package_name }}"
     state: "{{ haproxy_package_state }}"
     allow_downgrade: true
   when:
     - ansible_os_family == "Debian"
-    - not haproxy_installer.set_version
+    - not haproxy_installer.set_version | bool
 
 # Tool Installations
-- name: Install SELinux Packages.
+- name: "Install SELinux packages."
   ansible.builtin.apt:
     name: "{{ selinux_package }}"
   loop: "{{ haproxy_selinux_packages }}"
@@ -69,24 +72,24 @@
     loop_var: selinux_package
   when:
     - ansible_os_family == "Debian"
-    - haproxy_selinux_enabled
+    - haproxy_selinux_enabled | bool
 
 # RedHat Family Installation
-- name: Get dnf Repositories.
+- name: "Get dnf Repositories."
   ansible.builtin.command: dnf repolist
   register: haproxy_dnf_repos
   when:
     - ansible_os_family == "RedHat"
-    - haproxy_show_debug
+    - haproxy_show_debug | bool
 
-- name: Show dnf Repositories.
+- name: "Show dnf Repositories."
   ansible.builtin.debug:
     msg: "{{ haproxy_dnf_repos.stdout_lines }}"
   when:
     - ansible_os_family == "RedHat"
-    - haproxy_show_debug
+    - haproxy_show_debug | bool
 
-- name: Install Haproxy for RedHat Distribution Family.
+- name: "Install Haproxy for RedHat Distribution Family."
   ansible.builtin.dnf:
     name: "{{ haproxy_package_name }}"
     state: "{{ haproxy_package_state }}"
@@ -96,25 +99,25 @@
     - not haproxy_installer.set_version
 
 # Early Directory Setup
-- name: Create Config Directories.
+- name: "Create Config Directories."
   ansible.builtin.file:
     state: directory
-    mode: "{{ config_dir.mode | default('0755') }}"
+    mode: "{{ haproxy_config_dirs_elmt.mode | default('0755') }}"
     owner: "{{ haproxy_user }}"
     group: "{{ haproxy_group }}"
-    path: "{{ config_dir }}"
+    path: "{{ haproxy_config_dirs_elmt }}"
   loop: "{{ haproxy_config_dirs }}"
   loop_control:
-    loop_var: config_dir
+    loop_var: haproxy_config_dirs_elmt
 
 # Debug Version Informations
-- name: Gather the package facts.
+- name: "Gather the package facts."
   ansible.builtin.package_facts:
     manager: auto
-  when: haproxy_show_debug
+  when: haproxy_show_debug | bool
 
-- name: Print haproxy package facts.
+- name: "Print haproxy package facts."
   ansible.builtin.debug:
     msg: "{{ ansible_facts.packages['haproxy'][0].version }}"
-  when: haproxy_show_debug
+  when: haproxy_show_debug | bool
 ...
